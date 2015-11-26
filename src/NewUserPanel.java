@@ -34,17 +34,4 @@ public class NewUserPanel extends JPanel {
         back.addActionListener(new ButtonListener("Login"));
         add(back);
     }
-
-    public class ButtonListener implements ActionListener {
-        private String state;
-
-        public ButtonListener(String currState) {
-            state = currState;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            HotelApp.currentState = state;
-            HotelApp.checkState();
-        }
-    }
 }

@@ -1,9 +1,3 @@
-/*import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;*/
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -25,25 +19,12 @@ public class LoginPanel extends JPanel {
         add(pass);
         
         login = new JButton("Login");
-        //login.addActionListener(new ButtonListener("CustomerView"));
-        login.addActionListener(new ButtonListener("ManagerView"));
+        login.addActionListener(new ButtonListener("CustomerView"));
+        //login.addActionListener(new ButtonListener("ManagerView"));
         add(login);
         
         newUser = new JButton("New User?");
         newUser.addActionListener(new ButtonListener("NewUser"));
         add(newUser);
-    }
-    
-    public class ButtonListener implements ActionListener {
-        private String state;
-
-        public ButtonListener(String currState) {
-            state = currState;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            HotelApp.currentState = state;
-            HotelApp.checkState();
-        }
     }
 }

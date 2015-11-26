@@ -11,6 +11,7 @@ public class CustomerPanel extends JPanel {
         add(new JLabel("Welcome... "));
 
         newReserve = new JButton("New Reservation");
+        newReserve.addActionListener(new ButtonListener("SearchRooms"));
         add(newReserve);
         
         updateReserve = new JButton("Update Reservation");

@@ -18,6 +18,7 @@ public class HotelApp {
         layout.add(new NewUserPanel(), "NewUser");
         layout.add(new CustomerPanel(), "CustomerView");
         layout.add(new ManagerPanel(), "ManagerView");
+        layout.add(new SearchRoomsPanel(), "SearchRooms");
         
         checkState();
         
