@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
 import javax.sql.*;
+import java.util.Properties;
 
 public class HotelApp {
     public static final int WIDTH = 200, HEIGHT = 400;
@@ -40,15 +41,15 @@ public class HotelApp {
     
     public static Connection getConnection() throws SQLException {
         Connection aConn = null;
-        //Properties connectionProps = new Properties();
-        //connectionProps.put("user", "cs4400_Group_65");
-        //connectionProps.put("password", "Nj7gOvKI");
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "cs4400_Group_65");
+        connectionProps.put("password", "Nj7gOvKI");
 
-        //conn = DriverManager.getConnection(
-        //            "jdbc:mysql://" +
-        //            "PLACEHOLDER" +
-        //            ":" + "PLACEHOLDER" + "/",
-        //            connectionProps);
+        conn = DriverManager.getConnection(
+                   "jdbc:mysql://" +
+                   "PLACEHOLDER" +
+                   ":" + "PLACEHOLDER" + "/",
+                   connectionProps);
         
         System.out.println("Connected to database");
         return conn;
