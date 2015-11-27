@@ -17,7 +17,7 @@ public class HotelApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        conn = getConnection();
+        //conn = getConnection();
         
         layout = new JPanel(new CardLayout());
         layout.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -40,7 +40,7 @@ public class HotelApp {
     }
     
     public static Connection getConnection() throws SQLException {
-        Connection aConn = null;
+        conn = null;
         Properties connectionProps = new Properties();
         connectionProps.put("user", "cs4400_Group_65");
         connectionProps.put("password", "Nj7gOvKI");
