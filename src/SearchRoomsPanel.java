@@ -3,32 +3,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.event.*;
-import java.text.SimpleDateFormat;
 
 public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
-    private JTextField startYear, startMonth, startDay;
-    private JTextField endYear, endMonth, endDay;
+    private JTextField startDate, endDate;
+    private JButton search;
     Calendar start, end;
 
     public SearchRoomsPanel() {
         start = Calendar.getInstance();
         end = Calendar.getInstance();
-        
-        startYear = new JTextField(4);
-        startYear.getDocument().addDocumentListener(new DateListener(Calendar.YEAR, "start", startYear));
-        
-        startMonth = new JTextField(2);
-        startMonth.getDocument().addDocumentListener(new DateListener(Calendar.MONTH, "start", startMonth));
-        
-        startDay = new JTextField(2);
-        startDay.getDocument().addDocumentListener(new DateListener(Calendar.DAY_OF_MONTH, "start", startDay));
-        
-        endYear = new JTextField(4);
-        endMonth = new JTextField(2);
-        endDay = new JTextField(2);
-        
+
+        startDate = new JTextField(10);
+        endDate = new JTextField(10);
+
         String locations[] = {"Atlanta", "Charlotte", "Savannah", "Orlando", "Miami"};
         JComboBox dropDown = new JComboBox(locations);
         dropDown.addActionListener(new ActionListener() {
@@ -38,67 +26,60 @@ public class SearchRoomsPanel extends JPanel {
             }
         });
         add(dropDown);
-        
-        add(new JLabel("Start Date: "));
-        add(startMonth);
-        add(new JLabel(" / "));
-        add(startDay);
-        add(new JLabel(" / "));
-        add(startYear);
-        
-        add(new JLabel("_____________________"));
-        
-        add(new JLabel("End Date: "));
-        add(endMonth);
-        add(new JLabel(" / "));
-        add(endDay);
-        add(new JLabel(" / "));
-        add(endYear);
+
+        add(new JLabel("Start Date (mm/dd/yyyy):"));
+        add(startDate);
+
+        add(new JLabel("End Date (mm/dd/yyyy):"));
+        add(endDate);
+
+        search = new JButton ("Search");
+        search.addActionListener(new ButtonListener("INSERT NEXT PANEL"));
+        add(search);
     }
     
-    public void setDate(int timeUnit, int date, String whichDate) {
-        if (whichDate == "start") {
-            start.set(timeUnit, date);
-        } else {
-            end.set(timeUnit, date);
+    public void getDate() {
+        String startD = startDate.getText();
+        int index, index2, month, day, year;
+        try {
+            index = startD.indexOf("/");
+            month = Integer.parseInt(startD.substring(0, index));
+            index2 = startD.indexOf("/", index + 1);
+            day = Integer.parseInt(startD.substring(index + 1, index2));
+            year = Integer.parseInt(startD.substring(index2 + 1, startD.length()));
+            start.set(year, month - 1, day);
+        } catch (Exception e) {
+            JOptionPane error = new JOptionPane();
+            error.showMessageDialog(null, "Please check Start Date input.");
         }
-        //Testing the date
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(start.getTime());
-    }
-    
-    public class DateListener implements DocumentListener {
-        private int unit, day;
-        private String whichD;
-        private JTextField tex;
-
-        public DateListener(int timeUnit, String whichDate, JTextField text) {
-            unit = timeUnit;
-            whichD = whichDate;
-            tex = text;
-        }
+        System.out.println("Start: " + start.getTime()); //GET RID OF THIS LATER
         
-        public void changedUpdate(DocumentEvent e) {
-            actionPerformed();
+        String endD = endDate.getText();
+        try {
+            index = endD.indexOf("/");
+            month = Integer.parseInt(endD.substring(0, index));
+            index2 = endD.indexOf("/", index + 1);
+            day = Integer.parseInt(endD.substring(index + 1, index2));
+            year = Integer.parseInt(startD.substring(index2 + 1, endD.length()));
+            end.set(year, month - 1, day);
+        } catch (Exception e) {
+            JOptionPane error = new JOptionPane();
+            error.showMessageDialog(null, "Please check End Date input.");
         }
-        public void insertUpdate(DocumentEvent e) {
-            actionPerformed();
-        }
-        public void removeUpdate(DocumentEvent e) {
-            actionPerformed();
+        System.out.println("End: " + end.getTime()); //GET RID OF THIS LATER
+    }
+
+    public class ButtonListener implements ActionListener {
+        private String state;
+
+        public ButtonListener(String currState) {
+            state = currState;
         }
 
-        public void actionPerformed() {
-            try {
-                day = Integer.parseInt(tex.getText());
-                if (unit == Calendar.MONTH) {
-                    day--;
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane error = new JOptionPane();
-                error.showMessageDialog(null, "Insert number.");
-            }
-            setDate(unit, day, whichD);
+        public void actionPerformed(ActionEvent e) {
+            getDate();
+            //HotelApp.currentState = state;
+            //HotelApp.checkState();
         }
     }
 }
