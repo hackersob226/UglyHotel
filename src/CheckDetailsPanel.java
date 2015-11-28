@@ -4,30 +4,65 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
 
 public class CheckDetailsPanel extends JPanel {
     JTable table;
     DefaultListSelectionModel selectionModel;
-    JButton submit, addCard;
+    JButton submit, addCard, calculate;
     DataModel model;
     Object[][] data;
     Calendar startDate, endDate;
+    double price = -1, diff = 0;
+    JLabel totalCost;
 
     public CheckDetailsPanel(Object[][] selected, Calendar start, Calendar end) {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Extra Bed?"};
-
         data = selected;
-        start = startDate;
-        end = endDate;
+        startDate = start;
+        endDate = end;
         model = new DataModel(data, col);
         table = new JTable(model);
 
+        //I can't get deselection to work. So selection is a one way thing here.
+        add(new JLabel("After selecting Extra Bed Option, hit Calculate to find Total Cost"));
         table.setPreferredScrollableViewportSize(new Dimension(HotelApp.WIDTH - 50, HotelApp.HEIGHT - 150));
         JScrollPane scrollPane = new JScrollPane(table);
 
         add(scrollPane);
         selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
+
+        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+        String date1 = format1.format(startDate.getTime());
+        add(new JLabel("Start: " + date1));
+        String date2 = format1.format(endDate.getTime());
+        add(new JLabel("End: " + date2));
+
+        try {
+            Date dateStart = format1.parse(date1);
+            Date dateEnd = format1.parse(date2);
+            diff = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
+            //add(new JLabel("Number of days: " + diff));
+        } catch (Exception e) {
+            //hehe
+        }
+
+        add(new JLabel("Total Cost: "));
+        totalCost = new JLabel(" ");
+        add(totalCost);
+
+        calculate = new JButton("Calculate Price");
+        calculate.addActionListener(new ButtonListener("calculate"));
+        add(calculate);
+
+        addCard = new JButton("Add Card");
+        calculate.addActionListener(new ButtonListener("AddCard"));
+        add(addCard);
+
+        submit = new JButton("Submit");
+        calculate.addActionListener(new ButtonListener("Confirmation"));
+        add(submit);
     }
 
     private class DataModel extends DefaultTableModel {
@@ -53,9 +88,31 @@ public class CheckDetailsPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            HotelApp.currentState = state;
-            HotelApp.checkState();
-
+            if (state == "calculate") {
+                price = calculateTotal(diff);
+            } else {
+                HotelApp.currentState = state;
+                HotelApp.checkState();
+            }
         }
+    }
+    
+    public double calculateTotal(double numDays) {
+        double total = 0;
+        for (int i = 0; i < model.getRowCount(); i++){
+            if (selectionModel.isSelectedIndex(i)) {
+                model.setValueAt(new Boolean(true), i, 5);
+                System.out.println(selectionModel.isSelectedIndex(i));
+            }
+        }
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 5).equals(new Boolean(true))) {
+                total += numDays * (int)model.getValueAt(i, 4);
+            }
+            total += numDays * (int)model.getValueAt(i, 3);
+        }
+        totalCost.setText(""+total+"");
+        return total;
     }
 }

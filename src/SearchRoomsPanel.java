@@ -63,7 +63,7 @@ public class SearchRoomsPanel extends JPanel {
             month = Integer.parseInt(endD.substring(0, index));
             index2 = endD.indexOf("/", index + 1);
             day = Integer.parseInt(endD.substring(index + 1, index2));
-            year = Integer.parseInt(startD.substring(index2 + 1, endD.length()));
+            year = Integer.parseInt(endD.substring(index2 + 1, endD.length()));
             end.set(year, month - 1, day);
             flag2 = true;
         } catch (Exception e) {
