@@ -109,6 +109,9 @@ public class NewUserPanel extends JPanel {
             System.out.println(e.getMessage());
             return 2;
         }
+        if (stmt != null) { 
+            stmt.close();
+        }
         System.out.println("Added new user");
         return 0;
     }
