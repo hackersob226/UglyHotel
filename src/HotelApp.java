@@ -48,6 +48,7 @@ public class HotelApp {
         layout.add(new ManagerPanel(), "ManagerView");
         layout.add(new SearchRoomsPanel(), "SearchRooms");
         layout.add(new MakeReservationPanel(), "MakeReservation");
+        layout.add(new ConfirmationPanel(), "Confirmation");
         
         checkState();
         
