@@ -71,21 +71,64 @@ public class LoginPanel extends JPanel {
     //Make the SQL Query do the work rather than the java logic
     //Add a check for Manager vs. User
         Statement stmt = null;
-        String query = "SELECT USER, PASSWORD FROM " + dbName + ".USER WHERE";
+        String query = "SELECT * FROM " + dbName + ".USER";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
-                if(enteredUserName == rs.getString("USER") && enteredPassword == rs.getString("PASSWORD"))
+                String dbUsername = rs.getString("Username");
+                String dbPassword = rs.getString("Password");
+                System.out.println(dbUsername + " : " + dbPassword);
+                if(enteredUserName.equals(dbUsername) && enteredPassword.equals(dbPassword))
                 {
+                    System.out.println("Logged in!");
                     return 1;
                 }
             }
         } catch (SQLException e ) {
-            System.out.println("Could not find user.");
-        } finally {
-            if (stmt != null) { stmt.close(); }
+            System.out.println("Could not find user in USER.");
         }
+
+        stmt = null;
+        query = "SELECT Username FROM CUSTOMER";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String dbUsername = rs.getString("Username");
+                System.out.println(dbUsername);
+                if(enteredUserName.equals(dbUsername))
+                {
+                    System.out.println("Logged in!");
+                    return 1;
+                }
+            }
+        } catch (SQLException e ) {
+            System.out.println("Could not find user in CUSTOMER.");
+        }
+
+        stmt = null;
+        query = "SELECT Username FROM MANAGEMENT";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String dbUsername = rs.getString("Username");
+                System.out.println(dbUsername);
+                if(enteredUserName.equals(dbUsername))
+                {
+                    System.out.println("Logged in!");
+                    return 1;
+                }
+            }
+        } catch (SQLException e ) {
+            System.out.println("Could not find user in MANAGEMENT.");
+        }
+
+        if (stmt != null) { 
+            stmt.close();
+        }
+
         return 0;
     }
 }

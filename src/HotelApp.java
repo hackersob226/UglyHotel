@@ -6,7 +6,7 @@ import javax.sql.*;
 import java.util.Properties;
 
 public class HotelApp {
-    
+
     public static final int WIDTH = 800, HEIGHT = 300;
     public static Connection con = null;
     public static String dbname = "cs4400_Group_65";
@@ -22,8 +22,10 @@ public class HotelApp {
         try { 
             Class.forName("com.mysql.jdbc.Driver").newInstance(); 
             con = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu/cs4400_Group_65", "cs4400_Group_65", "Nj7gOvKI"); 
-            if(!con.isClosed()) 
+            if(!con.isClosed()) {
+                System.out.println(con);
                 System.out.println("Successfully connected to MySQL server..."); 
+            }
         } catch(Exception e) { 
             System.err.println("Exception: " + e.getMessage()); 
         } finally { 
