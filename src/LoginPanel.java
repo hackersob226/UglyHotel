@@ -23,11 +23,10 @@ public class LoginPanel extends JPanel {
 
         login = new JButton("Login");
         login.addActionListener(new ButtonListener("CustomerView"));
-        //login.addActionListener(new ButtonListener("ManagerView"));
         add(login);
 
         newUser = new JButton("New User?");
-        newUser.addActionListener(new ButtonListener("NewUser"));
+        newUser.addActionListener(new NewUserListener("NewUser"));
         add(newUser);
     }
 
@@ -56,52 +55,59 @@ public class LoginPanel extends JPanel {
                 HotelApp.checkState();
             }else
             {
-                //TODO
                 System.out.println("Incorrect Login Credentials");
             }
-            // HotelApp.currentState = state;
-            // HotelApp.checkState();
+        }
+    }
+
+    public class NewUserListener implements ActionListener {
+        private String state;
+
+        public NewUserListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            HotelApp.currentState = state;
+            HotelApp.checkState();
         }
     }
 
     public int checkUser(Connection con, String dbName, String username, String password) throws SQLException {
-
-    //TODO
-    //Make the SQL Query do the work rather than the java logic
         Statement stmt = null;
-        String query = "SELECT Username FROM CUSTOMER";
+        String query = "SELECT CUSTOMER.Username, USER.Password FROM CUSTOMER, USER WHERE CUSTOMER.Username = \"" + username + "\" AND USER.Password = \"" + password + "\" AND CUSTOMER.Username = USER.Username";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                String dbUsername = rs.getString("Username");
-                System.out.println(dbUsername);
-                if((username != null) && username.equals(dbUsername))
-                {
-                    System.out.println("Logged in!");
-                    return 1;
-                }
+
+            if(!rs.isBeforeFirst())
+            {
+                System.out.println("Could not find user in CUSTOMER.");
+            }else
+            {
+                System.out.println("Logged in as a customer.");
+                return 1;
             }
         } catch (SQLException e ) {
-            System.out.println("Could not find user in CUSTOMER.");
+            System.out.println("Error");
         }
 
         stmt = null;
-        query = "SELECT Username FROM MANAGEMENT";
+        query = "SELECT MANAGEMENT.Username, USER.Password FROM MANAGEMENT, USER WHERE MANAGEMENT.Username = \"" + username + "\" AND USER.Password = \"" + password + "\" AND MANAGEMENT.Username = USER.Username";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                String dbUsername = rs.getString("Username");
-                System.out.println(dbUsername);
-                if((username != null) && username.equals(dbUsername))
-                {
-                    System.out.println("Logged in!");
-                    return 2;
-                }
+
+            if(!rs.isBeforeFirst())
+            {
+                System.out.println("Could not find user in MANAGEMENT.");
+            }else
+            {
+                System.out.println("Logged in as a manager.");
+                return 2;
             }
         } catch (SQLException e ) {
-            System.out.println("Could not find user in MANAGEMENT.");
+            System.out.println("Error");
         }
 
         if (stmt != null) { 
