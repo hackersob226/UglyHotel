@@ -40,7 +40,6 @@ public class LoginPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             int userType = 0;
-
             try {
                 userType = checkUser(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText());
             } catch (SQLException ex) {
@@ -71,15 +70,16 @@ public class LoginPanel extends JPanel {
     //Make the SQL Query do the work rather than the java logic
     //Add a check for Manager vs. User
         Statement stmt = null;
-        String query = "SELECT * FROM " + dbName + ".USER";
+        String query = "SELECT Username, Password FROM USER";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+            System.out.println(username + " - " + password);
             while (rs.next()) {
                 String dbUsername = rs.getString("Username");
                 String dbPassword = rs.getString("Password");
                 System.out.println(dbUsername + " : " + dbPassword);
-                if(enteredUserName.equals(dbUsername) && enteredPassword.equals(dbPassword))
+                if((username != null) && username.equals(dbUsername) && (password != null) && password.equals(dbPassword))
                 {
                     System.out.println("Logged in!");
                     return 1;
@@ -97,7 +97,7 @@ public class LoginPanel extends JPanel {
             while (rs.next()) {
                 String dbUsername = rs.getString("Username");
                 System.out.println(dbUsername);
-                if(enteredUserName.equals(dbUsername))
+                if((username != null) && username.equals(dbUsername))
                 {
                     System.out.println("Logged in!");
                     return 1;
@@ -115,7 +115,7 @@ public class LoginPanel extends JPanel {
             while (rs.next()) {
                 String dbUsername = rs.getString("Username");
                 System.out.println(dbUsername);
-                if(enteredUserName.equals(dbUsername))
+                if((username != null) && username.equals(dbUsername))
                 {
                     System.out.println("Logged in!");
                     return 1;

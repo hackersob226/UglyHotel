@@ -23,17 +23,17 @@ public class HotelApp {
             Class.forName("com.mysql.jdbc.Driver").newInstance(); 
             con = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu/cs4400_Group_65", "cs4400_Group_65", "Nj7gOvKI"); 
             if(!con.isClosed()) {
-                System.out.println(con);
                 System.out.println("Successfully connected to MySQL server..."); 
             }
         } catch(Exception e) { 
             System.err.println("Exception: " + e.getMessage()); 
-        } finally { 
-            try { 
-                if(con != null) 
-                    con.close(); 
-            } catch(SQLException e) {} 
         }
+        // finally { 
+        //     try { 
+        //         if(con != null) 
+        //             con.close(); 
+        //     } catch(SQLException e) {} 
+        // }
         
         layout = new JPanel(new CardLayout());
         layout.setPreferredSize(new Dimension(WIDTH, HEIGHT));
