@@ -41,11 +41,11 @@ public class LoginPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int userType = 0;
 
-            // try {
-            //     userType = checkUser(HotelApp.conn, "hoteldb", userName.getText(), pass.getText());
-            // } catch (SQLException ex) {
-            //     System.out.println("Error");
-            // }
+            try {
+                userType = checkUser(HotelApp.conn, HotelApp.dbname, userName.getText(), pass.getText());
+            } catch (SQLException ex) {
+                System.out.println("Error");
+            }
             
             if(userType == 1)
             {
@@ -58,7 +58,7 @@ public class LoginPanel extends JPanel {
             }else
             {
                 //TODO
-                //Invalid Login or some Error
+                System.out.println("Incorrect Login Credentials");
             }
             HotelApp.currentState = state;
             HotelApp.checkState();
@@ -71,7 +71,7 @@ public class LoginPanel extends JPanel {
     //Make the SQL Query do the work rather than the java logic
     //Add a check for Manager vs. User
         Statement stmt = null;
-        String query = "select USER, PASSWORD from " + dbName + ".USER";
+        String query = "SELECT USER, PASSWORD FROM " + dbName + ".USER WHERE";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);

@@ -7,7 +7,8 @@ import java.util.Properties;
 
 public class HotelApp {
     public static final int WIDTH = 200, HEIGHT = 400;
-    public static Connection conn;
+    public static Connection con = null;
+    public static String dbname = "cs4400_Group_65";
 
     static JPanel layout;
     static String currentState = "Login";
@@ -17,11 +18,18 @@ public class HotelApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        try {
-            conn = getConnection();
-        } catch(SQLException e)
-        {
-            System.out.println("Connection Error");
+        try { 
+            Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+            con = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu/cs4400_Group_65", "cs4400_Group_65", "Nj7gOvKI"); 
+            if(!con.isClosed()) 
+                System.out.println("Successfully connected to MySQL server..."); 
+        } catch(Exception e) { 
+            System.err.println("Exception: " + e.getMessage()); 
+        } finally { 
+            try { 
+                if(con != null) 
+                    con.close(); 
+            } catch(SQLException e) {} 
         }
         
         layout = new JPanel(new CardLayout());
@@ -42,19 +50,5 @@ public class HotelApp {
     public static void checkState() {
         CardLayout c = (CardLayout)(layout.getLayout());
         c.show(layout, currentState);
-    }
-    
-    public static Connection getConnection() throws SQLException {
-        conn = null;
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", "cs4400_Group_65");
-        connectionProps.put("password", "Nj7gOvKI");
-
-        //TODO
-        //Figure out the actual database URL
-        conn = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu:22/hoteldb", connectionProps);
-        
-        System.out.println("Connected to database");
-        return conn;
     }
 }
