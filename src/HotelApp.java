@@ -6,14 +6,10 @@ import javax.sql.*;
 import java.util.Properties;
 
 public class HotelApp {
-<<<<<<< HEAD
-    public static final int WIDTH = 200, HEIGHT = 400;
+    
+    public static final int WIDTH = 800, HEIGHT = 300;
     public static Connection con = null;
     public static String dbname = "cs4400_Group_65";
-=======
-    public static final int WIDTH = 800, HEIGHT = 300;
-    public static Connection conn;
->>>>>>> origin/master
 
     static JPanel layout;
     static String currentState = "Login";

@@ -42,7 +42,7 @@ public class LoginPanel extends JPanel {
             int userType = 0;
 
             try {
-                userType = checkUser(HotelApp.conn, HotelApp.dbname, userName.getText(), pass.getText());
+                userType = checkUser(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText());
             } catch (SQLException ex) {
                 System.out.println("Error");
             }
