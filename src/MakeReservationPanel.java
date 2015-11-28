@@ -26,8 +26,8 @@ public class MakeReservationPanel extends JPanel {
 
         add(scrollPane);
         selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
-        submit = new JButton("Submit");
-        submit.addActionListener(new ButtonListener(" "));
+        submit = new JButton("Check Details");
+        submit.addActionListener(new ButtonListener("CheckDetails"));
         add(submit);
     }
 
@@ -90,8 +90,8 @@ public class MakeReservationPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             getSelectedRows();
-            //HotelApp.currentState = state;
-            //HotelApp.checkState();
+            HotelApp.currentState = state;
+            HotelApp.checkState();
 
         }
     }
