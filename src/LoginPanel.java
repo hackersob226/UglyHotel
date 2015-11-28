@@ -23,11 +23,10 @@ public class LoginPanel extends JPanel {
 
         login = new JButton("Login");
         login.addActionListener(new ButtonListener("CustomerView"));
-        //login.addActionListener(new ButtonListener("ManagerView"));
         add(login);
 
         newUser = new JButton("New User?");
-        newUser.addActionListener(new ButtonListener("NewUser"));
+        newUser.addActionListener(new NewUserListener("NewUser"));
         add(newUser);
     }
 
@@ -56,18 +55,25 @@ public class LoginPanel extends JPanel {
                 HotelApp.checkState();
             }else
             {
-                //TODO
                 System.out.println("Incorrect Login Credentials");
             }
-            // HotelApp.currentState = state;
-            // HotelApp.checkState();
+        }
+    }
+
+    public class NewUserListener implements ActionListener {
+        private String state;
+
+        public NewUserListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            HotelApp.currentState = state;
+            HotelApp.checkState();
         }
     }
 
     public int checkUser(Connection con, String dbName, String username, String password) throws SQLException {
-
-    //TODO
-    //Make the SQL Query do the work rather than the java logic
         Statement stmt = null;
         String query = "SELECT CUSTOMER.Username, USER.Password FROM CUSTOMER, USER WHERE CUSTOMER.Username = \"" + username + "\" AND USER.Password = \"" + password + "\" AND CUSTOMER.Username = USER.Username";
         try {
