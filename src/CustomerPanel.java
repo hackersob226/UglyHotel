@@ -26,4 +26,17 @@ public class CustomerPanel extends JPanel {
         viewFeedback = new JButton("View Feedback");
         add(viewFeedback);
     }
+    
+    public class ButtonListener implements ActionListener {
+        private String state;
+
+        public ButtonListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            HotelApp.currentState = state;
+            HotelApp.checkState();
+        }
+    }
 }

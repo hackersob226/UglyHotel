@@ -15,12 +15,16 @@ public class SearchRoomsPanel extends JPanel {
     public SearchRoomsPanel() {
         start = Calendar.getInstance();
         end = Calendar.getInstance();
-        //int space = Calendar.YEAR;
         
         startYear = new JTextField(4);
-        startYear.getDocument().addDocumentListener(new DateListener(Calendar.YEAR, "start"));
+        startYear.getDocument().addDocumentListener(new DateListener(Calendar.YEAR, "start", startYear));
+        
         startMonth = new JTextField(2);
+        startMonth.getDocument().addDocumentListener(new DateListener(Calendar.MONTH, "start", startMonth));
+        
         startDay = new JTextField(2);
+        startDay.getDocument().addDocumentListener(new DateListener(Calendar.DAY_OF_MONTH, "start", startDay));
+        
         endYear = new JTextField(4);
         endMonth = new JTextField(2);
         endDay = new JTextField(2);
@@ -66,10 +70,12 @@ public class SearchRoomsPanel extends JPanel {
     public class DateListener implements DocumentListener {
         private int unit, day;
         private String whichD;
+        private JTextField tex;
 
-        public DateListener(int timeUnit, String whichDate) {
+        public DateListener(int timeUnit, String whichDate, JTextField text) {
             unit = timeUnit;
             whichD = whichDate;
+            tex = text;
         }
         
         public void changedUpdate(DocumentEvent e) {
@@ -84,7 +90,10 @@ public class SearchRoomsPanel extends JPanel {
 
         public void actionPerformed() {
             try {
-                day = Integer.parseInt(startYear.getText());
+                day = Integer.parseInt(tex.getText());
+                if (unit == Calendar.MONTH) {
+                    day--;
+                }
             } catch (NumberFormatException e) {
                 JOptionPane error = new JOptionPane();
                 error.showMessageDialog(null, "Insert number.");

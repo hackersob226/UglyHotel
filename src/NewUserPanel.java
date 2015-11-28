@@ -29,9 +29,22 @@ public class NewUserPanel extends JPanel {
         submit = new JButton("Submit");
         submit.addActionListener(new ButtonListener("Login"));
         add(submit);
-        
+
         back = new JButton("Cancel");
         back.addActionListener(new ButtonListener("Login"));
         add(back);
+    }
+
+    public class ButtonListener implements ActionListener {
+        private String state;
+
+        public ButtonListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            HotelApp.currentState = state;
+            HotelApp.checkState();
+        }
     }
 }
