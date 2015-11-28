@@ -14,7 +14,7 @@ public class HotelApp {
     public static String dbname = "cs4400_Group_65";
 
     static JPanel layout, detailPanel;
-    static String currentState = "CustomerView"; //Messing around with this
+    static String currentState = "Login"; //Messing around with this
     
     static Calendar startSearchReserveDate, endSearchReserveDate;
     static Object[][] tempArrayForDetails;
