@@ -10,7 +10,6 @@ public class MakeReservationPanel extends JPanel {
     DefaultListSelectionModel selectionModel;
     JButton submit;
     DataModel model;
-    Object[][] temp;
 
     public MakeReservationPanel() {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
@@ -47,21 +46,22 @@ public class MakeReservationPanel extends JPanel {
             }
         }
 
-        Object[][] someArray = new Object[rowCount][model.getColumnCount() - 1];
+        Object[][] someArray = new Object[rowCount][model.getColumnCount()];
         for (int i = 0; i < model.getRowCount(); i++) {
             if (model.getValueAt(i, 5).equals(new Boolean(true))) {
                 for (int j = 0; j < model.getColumnCount() - 1; j++) {
                     someArray[currRow][j] = model.getValueAt(i, j);
                 }
+                someArray[currRow][5] = false;
                 currRow++;
             }
         }
         
-        temp = someArray;
-        /*Print Array
-        for (int i = 0; i < someArray.length; i++) {
-            for(int j = 0; j < someArray[i].length; j++) {
-                System.out.println(someArray[i][j]);
+        HotelApp.tempArrayForDetails = someArray;
+        //Print Array
+        /*for (int i = 0; i < HotelApp.tempArrayForDetails.length; i++) {
+            for(int j = 0; j < HotelApp.tempArrayForDetails[i].length; j++) {
+                System.out.println(HotelApp.tempArrayForDetails[i][j]);
             }
         }*/
     }
@@ -90,6 +90,7 @@ public class MakeReservationPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             getSelectedRows();
+            HotelApp.transReservetoDetails();
             HotelApp.currentState = state;
             HotelApp.checkState();
 

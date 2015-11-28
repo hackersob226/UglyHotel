@@ -72,6 +72,8 @@ public class SearchRoomsPanel extends JPanel {
         }
         System.out.println("End: " + end.getTime()); //GET RID OF THIS LATER
         
+        HotelApp.startSearchReserveDate = start; //Sends the date as metaData
+        HotelApp.endSearchReserveDate = end;
         if (flag1 && flag2) {
             return true;
         }

@@ -10,13 +10,16 @@ public class CheckDetailsPanel extends JPanel {
     DefaultListSelectionModel selectionModel;
     JButton submit, addCard;
     DataModel model;
+    Object[][] data;
+    Calendar startDate, endDate;
 
-    public CheckDetailsPanel() {
+    public CheckDetailsPanel(Object[][] selected, Calendar start, Calendar end) {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Extra Bed?"};
-        Object[][] data = { {new Integer(11), "6FIller", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)},
-            {new Integer(11), "FIllerino", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)}
-        };
+
+        data = selected;
+        start = startDate;
+        end = endDate;
         model = new DataModel(data, col);
         table = new JTable(model);
 
