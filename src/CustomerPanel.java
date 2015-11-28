@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.sql.*;
+import javax.sql.*;
 
 public class CustomerPanel extends JPanel {
     private JButton newReserve, updateReserve, cancelReserve, newFeedback, viewFeedback;

@@ -17,7 +17,12 @@ public class HotelApp {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        //conn = getConnection();
+        try {
+            conn = getConnection();
+        } catch(SQLException e)
+        {
+            System.out.println("Connection Error");
+        }
         
         layout = new JPanel(new CardLayout());
         layout.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -46,11 +51,9 @@ public class HotelApp {
         connectionProps.put("user", "cs4400_Group_65");
         connectionProps.put("password", "Nj7gOvKI");
 
-        conn = DriverManager.getConnection(
-                   "jdbc:mysql://" +
-                   "PLACEHOLDER" +
-                   ":" + "PLACEHOLDER" + "/",
-                   connectionProps);
+        //TODO
+        //Figure out the actual database URL
+        conn = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu:22/hoteldb", connectionProps);
         
         System.out.println("Connected to database");
         return conn;
