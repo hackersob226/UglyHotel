@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.sql.*;
 import javax.sql.*;
 import java.util.Properties;
+import java.io.*;
+import java.util.*;
 
 public class HotelApp {
 
@@ -11,8 +13,11 @@ public class HotelApp {
     public static Connection con = null;
     public static String dbname = "cs4400_Group_65";
 
-    static JPanel layout;
-    static String currentState = "Login";
+    static JPanel layout, detailPanel;
+    static String currentState = "CustomerView"; //Messing around with this
+    
+    static Calendar startSearchReserveDate, endSearchReserveDate;
+    static Object[][] tempArrayForDetails;
     
     public static void main(String[] args) {
         JFrame frame = new JFrame("Fancy Hotels");
@@ -43,7 +48,6 @@ public class HotelApp {
         layout.add(new ManagerPanel(), "ManagerView");
         layout.add(new SearchRoomsPanel(), "SearchRooms");
         layout.add(new MakeReservationPanel(), "MakeReservation");
-        layout.add(new CheckDetailsPanel(), "CheckDetails");
         
         checkState();
         
@@ -55,5 +59,9 @@ public class HotelApp {
     public static void checkState() {
         CardLayout c = (CardLayout)(layout.getLayout());
         c.show(layout, currentState);
+    }
+    
+    public static void transReservetoDetails() {
+        layout.add(new CheckDetailsPanel(tempArrayForDetails, startSearchReserveDate, endSearchReserveDate), "CheckDetails");
     }
 }
