@@ -55,6 +55,17 @@ public class CheckDetailsPanel extends JPanel {
         calculate = new JButton("Calculate Price");
         calculate.addActionListener(new ButtonListener("calculate"));
         add(calculate);
+        
+        //Credit Card numbers go here
+        Integer creditCards[] = {new Integer(1234), new Integer(2345)};
+        JComboBox dropDown = new JComboBox(creditCards);
+        dropDown.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedCard = (int)dropDown.getSelectedItem();
+                System.out.println(selectedCard); //GET RID OF THIS LATER
+            }
+        });
+        add(dropDown);
 
         addCard = new JButton("Add Card");
         calculate.addActionListener(new ButtonListener("AddCard"));
