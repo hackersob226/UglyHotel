@@ -6,7 +6,7 @@ import javax.sql.*;
 import java.util.Properties;
 
 public class HotelApp {
-    public static final int WIDTH = 200, HEIGHT = 400;
+    public static final int WIDTH = 800, HEIGHT = 300;
     public static Connection conn;
 
     static JPanel layout;
@@ -26,6 +26,7 @@ public class HotelApp {
         layout.add(new CustomerPanel(), "CustomerView");
         layout.add(new ManagerPanel(), "ManagerView");
         layout.add(new SearchRoomsPanel(), "SearchRooms");
+        layout.add(new MakeReservationPanel(), "MakeReservation");
         
         checkState();
         

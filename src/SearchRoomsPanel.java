@@ -34,11 +34,13 @@ public class SearchRoomsPanel extends JPanel {
         add(endDate);
 
         search = new JButton ("Search");
-        search.addActionListener(new ButtonListener("INSERT NEXT PANEL"));
+        search.addActionListener(new ButtonListener("MakeReservation"));
         add(search);
     }
     
-    public void getDate() {
+    public boolean getDate() {
+        boolean flag1 = false;
+        boolean flag2 = false;
         String startD = startDate.getText();
         int index, index2, month, day, year;
         try {
@@ -48,6 +50,7 @@ public class SearchRoomsPanel extends JPanel {
             day = Integer.parseInt(startD.substring(index + 1, index2));
             year = Integer.parseInt(startD.substring(index2 + 1, startD.length()));
             start.set(year, month - 1, day);
+            flag1 = true;
         } catch (Exception e) {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check Start Date input.");
@@ -62,11 +65,17 @@ public class SearchRoomsPanel extends JPanel {
             day = Integer.parseInt(endD.substring(index + 1, index2));
             year = Integer.parseInt(startD.substring(index2 + 1, endD.length()));
             end.set(year, month - 1, day);
+            flag2 = true;
         } catch (Exception e) {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check End Date input.");
         }
         System.out.println("End: " + end.getTime()); //GET RID OF THIS LATER
+        
+        if (flag1 && flag2) {
+            return true;
+        }
+        return false;
     }
 
     public class ButtonListener implements ActionListener {
@@ -77,9 +86,10 @@ public class SearchRoomsPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            getDate();
-            //HotelApp.currentState = state;
-            //HotelApp.checkState();
+            if (getDate()) {
+                HotelApp.currentState = state;
+                HotelApp.checkState();
+            }
         }
     }
 }
