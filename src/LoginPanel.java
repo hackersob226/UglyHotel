@@ -59,8 +59,8 @@ public class LoginPanel extends JPanel {
                 //TODO
                 System.out.println("Incorrect Login Credentials");
             }
-            HotelApp.currentState = state;
-            HotelApp.checkState();
+            // HotelApp.currentState = state;
+            // HotelApp.checkState();
         }
     }
 
@@ -68,29 +68,8 @@ public class LoginPanel extends JPanel {
 
     //TODO
     //Make the SQL Query do the work rather than the java logic
-    //Add a check for Manager vs. User
         Statement stmt = null;
-        String query = "SELECT Username, Password FROM USER";
-        try {
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            System.out.println(username + " - " + password);
-            while (rs.next()) {
-                String dbUsername = rs.getString("Username");
-                String dbPassword = rs.getString("Password");
-                System.out.println(dbUsername + " : " + dbPassword);
-                if((username != null) && username.equals(dbUsername) && (password != null) && password.equals(dbPassword))
-                {
-                    System.out.println("Logged in!");
-                    return 1;
-                }
-            }
-        } catch (SQLException e ) {
-            System.out.println("Could not find user in USER.");
-        }
-
-        stmt = null;
-        query = "SELECT Username FROM CUSTOMER";
+        String query = "SELECT Username FROM CUSTOMER";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -118,7 +97,7 @@ public class LoginPanel extends JPanel {
                 if((username != null) && username.equals(dbUsername))
                 {
                     System.out.println("Logged in!");
-                    return 1;
+                    return 2;
                 }
             }
         } catch (SQLException e ) {
