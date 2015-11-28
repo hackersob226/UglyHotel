@@ -50,6 +50,8 @@ public class HotelApp {
         connectionProps.put("user", "cs4400_Group_65");
         connectionProps.put("password", "Nj7gOvKI");
 
+        //TODO
+        //Figure out the actual database URL
         conn = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu:22/hoteldb", connectionProps);
         
         System.out.println("Connected to database");

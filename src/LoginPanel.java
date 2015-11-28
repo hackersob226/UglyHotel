@@ -40,12 +40,10 @@ public class LoginPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             int userType = 0;
-            enteredUserName = userName.getText();
-            enteredPassword = pass.getText();
 
             // try {
-            //     userType = checkUser(HotelApp.conn, "hoteldb");
-            // } catch (SQLException ex ) {
+            //     userType = checkUser(HotelApp.conn, "hoteldb", userName.getText(), pass.getText());
+            // } catch (SQLException ex) {
             //     System.out.println("Error");
             // }
             
@@ -67,8 +65,11 @@ public class LoginPanel extends JPanel {
         }
     }
 
-    public int checkUser(Connection con, String dbName) throws SQLException {
+    public int checkUser(Connection con, String dbName, String username, String password) throws SQLException {
 
+    //TODO
+    //Make the SQL Query do the work rather than the java logic
+    //Add a check for Manager vs. User
         Statement stmt = null;
         String query = "select USER, PASSWORD from " + dbName + ".USER";
         try {
