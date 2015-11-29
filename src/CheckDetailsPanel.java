@@ -40,8 +40,8 @@ public class CheckDetailsPanel extends JPanel {
         add(new JLabel("End: " + date2));
 
         try {
-            Date dateStart = format1.parse(date1);
-            Date dateEnd = format1.parse(date2);
+            java.util.Date dateStart = format1.parse(date1);
+            java.util.Date dateEnd = format1.parse(date2);
             diff = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
             //add(new JLabel("Number of days: " + diff));
         } catch (Exception e) {

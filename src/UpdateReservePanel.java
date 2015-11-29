@@ -101,6 +101,8 @@ public class UpdateReservePanel extends JPanel {
         }
         System.out.println("End: " + newEnd.getTime()); //GET RID OF THIS LATER
         
+        HotelApp.startSearchReserveDate = newStart; //Sends the date as metaData
+        HotelApp.endSearchReserveDate = newEnd;
         if (flag1 && flag2) {
             return true;
         }
@@ -118,6 +120,7 @@ public class UpdateReservePanel extends JPanel {
             if (state == "AvailableRooms") {
                 if (id != -1) {
                     if (searchAvail()) {
+                        HotelApp.createAvailRooms();
                         HotelApp.currentState = state;
                         HotelApp.checkState();
                     }

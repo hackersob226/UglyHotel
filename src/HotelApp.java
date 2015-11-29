@@ -62,6 +62,7 @@ public class HotelApp {
         c.show(layout, currentState);
     }
     
+    //These have to be added everytime since they're instances of panels
     public static void createReservation() {
         layout.add(new MakeReservationPanel(), "MakeReservation");
     }
@@ -72,5 +73,9 @@ public class HotelApp {
     
     public static void createUpdateReserve() {
         layout.add(new UpdateReservePanel(), "UpdateReserve");
+    }
+    
+    public static void createAvailRooms() {
+        layout.add(new AvailableRoomsPanel(), "AvailableRooms");
     }
 }
