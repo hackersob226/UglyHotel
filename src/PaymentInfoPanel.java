@@ -42,7 +42,7 @@ public class PaymentInfoPanel extends JPanel {
         add(cvv);
 
         save = new JButton("Save");
-        save.addActionListener(new SaveListener("Save"));
+        save.addActionListener(new SaveListener("CheckDetails"));
         add(save);
 
         add(new JLabel("___________________________________________________________________________________________________________"));
@@ -67,7 +67,7 @@ public class PaymentInfoPanel extends JPanel {
         add(dropDown);
 
         delete = new JButton("Delete");
-        delete.addActionListener(new DeleteListener("Delete"));
+        delete.addActionListener(new DeleteListener("CheckDetails"));
         add(delete);
         add(new JLabel("___________________________________________________________________________________________________________"));
         back = new JButton("Back");
@@ -157,11 +157,8 @@ public class PaymentInfoPanel extends JPanel {
                 System.out.println(ex.getMessage());
             }
 
-            try {
-                populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
+            HotelApp.currentState = state;
+            HotelApp.checkState();
         }
     }
 
@@ -185,11 +182,8 @@ public class PaymentInfoPanel extends JPanel {
                 System.out.println(ex.getMessage());
             }
 
-            try {
-                populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
+            HotelApp.currentState = state;
+            HotelApp.checkState();
         }
     }
 
@@ -225,6 +219,8 @@ public class PaymentInfoPanel extends JPanel {
     }
 
     public int addCard(Connection con, String dbName, String username, String saveCard, String name, String addCVV, String expiryDate) throws SQLException {
+        //TODO
+        //Guard against bad input
         PreparedStatement stmt = null;
         String query = "INSERT INTO PAYMENTINFORMATION VALUES (\"" + saveCard + "\", \"" + name + "\", \"" + expiryDate + "\", \"" + addCVV + "\", \"" + username + "\")";
         try {
