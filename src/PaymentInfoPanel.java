@@ -49,14 +49,15 @@ public class PaymentInfoPanel extends JPanel {
         add(new JLabel("** DELETE CARD **"));
 
         //Credit Cards go here
-        // try {
-        //     removeCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, selectedCard);
-        // } catch (SQLException ex) {
-        //     System.out.println(ex.getMessage());
-        // }
-        String[] tempCreditCards = {"1234", "2345"};
-        creditCards = tempCreditCards;
+        try {
+            populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // String[] tempCreditCards = {"1234", "2345"};
+        // creditCards = tempCreditCards;
         dropDown = new JComboBox(creditCards);
+        selectedCard = dropDown.getItemAt(0);
         dropDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 selectedCard = (String)dropDown.getSelectedItem();
@@ -155,6 +156,12 @@ public class PaymentInfoPanel extends JPanel {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
+
+            try {
+                populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -176,6 +183,12 @@ public class PaymentInfoPanel extends JPanel {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
+
+            try {
+                populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -185,18 +198,26 @@ public class PaymentInfoPanel extends JPanel {
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            ArrayList<String> tempList = new ArrayList();
+            ArrayList<String> tempList = new ArrayList<String>();
+            creditCards = new String[1];
 
             while(rs.next())
             {
                 tempList.add(rs.getString("CardNum"));
             }
 
-            creditCards = tempList.toArray(creditCards);
+            if(tempList != null)
+            {
+                creditCards = tempList.toArray(creditCards);
+            }
 
             return 1;
         } catch (SQLException e ) {
             System.out.println(e.getMessage());
+        }
+
+        if (stmt != null) { 
+            stmt.close();
         }
 
         return 0;
@@ -216,6 +237,10 @@ public class PaymentInfoPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
+        if (stmt != null) { 
+            stmt.close();
+        }
+
         return 0;
     }
 
@@ -231,6 +256,10 @@ public class PaymentInfoPanel extends JPanel {
             return 1;
         } catch (SQLException e ) {
             System.out.println(e.getMessage());
+        }
+
+        if (stmt != null) { 
+            stmt.close();
         }
 
         return 0;

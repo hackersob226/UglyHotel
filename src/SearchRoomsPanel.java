@@ -127,6 +127,10 @@ public class SearchRoomsPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
+        if (stmt != null) { 
+            stmt.close();
+        }
+
         return null;
     }
 }
