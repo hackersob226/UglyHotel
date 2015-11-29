@@ -10,12 +10,8 @@ public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
     private JTextField startDate, endDate;
     private JButton search;
-<<<<<<< HEAD
-    Calendar start, end; //Putting Start/end date in these variables when "Search" is clicked
-=======
     ResultSet reservationTable;
-    Calendar start, end;
->>>>>>> origin/master
+    Calendar start, end; //Putting Start/end date in these variables when "Search" is clicked
 
     public SearchRoomsPanel() {
         start = Calendar.getInstance();
