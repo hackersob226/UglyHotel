@@ -81,8 +81,8 @@ public class NewUserPanel extends JPanel {
 
     public int checkSubmit(Connection con, String dbName, String username, String password, String confirmPassword, String email) throws SQLException {
         PreparedStatement stmt = null;
-        String query1 = "INSERT INTO USER VALUES (\"" + username + "\", \"" + password + "\");";
-        String query2 = "INSERT INTO CUSTOMER VALUES (\"" + username + "\", \"" + email + "\");";
+        String query1 = "INSERT INTO USER VALUES (\"" + username + "\", \"" + password + "\")";
+        String query2 = "INSERT INTO CUSTOMER VALUES (\"" + username + "\", \"" + email + "\")";
         
         if(!password.equals(confirmPassword))
         {

@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.sql.*;
+import javax.sql.*;
 
 public class PaymentInfoPanel extends JPanel {
     JTextField name, cardNum, expDate, cvv;
@@ -38,13 +40,18 @@ public class PaymentInfoPanel extends JPanel {
         add(cvv);
 
         save = new JButton("Save");
-        save.addActionListener(new ButtonListener("Save"));
+        save.addActionListener(new SaveListener("Save"));
         add(save);
 
         add(new JLabel("___________________________________________________________________________________________________________"));
         add(new JLabel("** DELETE CARD **"));
 
         //Credit Cards go here
+        // try {
+        //     removeCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, selectedCard);
+        // } catch (SQLException ex) {
+        //     System.out.println(ex.getMessage());
+        // }
         String[] tempCreditCards = {"1234", "2345"};
         creditCards = tempCreditCards;
         dropDown = new JComboBox(creditCards);
@@ -57,11 +64,11 @@ public class PaymentInfoPanel extends JPanel {
         add(dropDown);
 
         delete = new JButton("Delete");
-        delete.addActionListener(new ButtonListener("Delete"));
+        delete.addActionListener(new DeleteListener("Delete"));
         add(delete);
         add(new JLabel("___________________________________________________________________________________________________________"));
         back = new JButton("Back");
-        back.addActionListener(new ButtonListener("CheckDetails"));
+        back.addActionListener(new BackListener("CheckDetails"));
         add(back);
     }
     
@@ -119,22 +126,106 @@ public class PaymentInfoPanel extends JPanel {
         }
     }
 
-    public class ButtonListener implements ActionListener {
+    public class BackListener implements ActionListener {
         private String state;
 
-        public ButtonListener(String currState) {
+        public BackListener(String currState) {
             state = currState;
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (state == "CheckDetails") {
-                HotelApp.currentState = state;
-                HotelApp.checkState();
-            } else if (state == "Delete") {
-                delete();
-            } else if (state == "Save") {
-                save();
+            state = "CheckDetails";
+            HotelApp.currentState = state;
+            HotelApp.checkState();
+        }
+    }
+
+    public class DeleteListener implements ActionListener {
+        private String state;
+
+        public DeleteListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                removeCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, selectedCard);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
             }
         }
+    }
+
+    public class SaveListener implements ActionListener {
+        private String state;
+
+        public SaveListener(String currState) {
+            state = currState;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                addCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, cardNum.getText(), name.getText(), cvv.getText(), expDate.getText());
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    public int populateCards(Connection con, String dbName, String userName) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT CardNum FROM PAYMENTINFORMATION WHERE PAYMENTINFORMATION.Username = \"" + userName + "\"";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            ArrayList<String> tempList = new ArrayList();
+
+            while(rs.next())
+            {
+                tempList.add(rs.getString("CardNum"));
+            }
+
+            creditCards = tempList.toArray(creditCards);
+
+            return 1;
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public int addCard(Connection con, String dbName, String username, String saveCard, String name, String addCVV, String expiryDate) throws SQLException {
+        PreparedStatement stmt = null;
+        String query = "INSERT INTO PAYMENTINFORMATION VALUES (\"" + saveCard + "\", \"" + name + "\", \"" + expiryDate + "\", \"" + addCVV + "\", \"" + username + "\")";
+        try {
+            con.setAutoCommit(false);
+            stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
+            con.commit();
+
+            return 1;
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public int removeCard(Connection con, String dbName, String username, String deleteCard) throws SQLException {
+        PreparedStatement stmt = null;
+        String query = "DELETE FROM PAYMENTINFORMATION WHERE PAYMENTINFORMATION.Username = \"" + username +"\" AND PAYMENTINFORMATION.CardNum = \"" + deleteCard + "\"";
+        try {
+            con.setAutoCommit(false);
+            stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
+            con.commit();
+
+            return 1;
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
+        }
+
+        return 0;
     }
 }

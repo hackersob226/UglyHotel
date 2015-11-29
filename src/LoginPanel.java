@@ -9,7 +9,7 @@ import javax.sql.*;
 public class LoginPanel extends JPanel {
     private JButton login, newUser;
     private JTextField userName, pass;
-    private String enteredUserName, enteredPassword;
+    public static String sessionUserName;
 
     public LoginPanel() {
         userName = new JTextField(15);
@@ -39,6 +39,7 @@ public class LoginPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             int userType = 0;
+            sessionUserName = userName.getText();
             try {
                 userType = checkUser(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText());
             } catch (SQLException ex) {

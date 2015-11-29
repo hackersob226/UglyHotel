@@ -110,21 +110,18 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < startDate)";
+        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > " + endDate + " AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < " + startDate + " AND RESERVATION.StartDate < startDate)";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             if(!rs.isBeforeFirst())
             {
-                System.out.println("Could not find user in CUSTOMER.");
-            }else
-            {
-                System.out.println("Logged in as a customer.");
+                System.out.println("Could not find any available rooms.");
             }
             return rs;
         } catch (SQLException e ) {
-            System.out.println("Error");
+            System.out.println(e.getMessage());
         }
 
         return null;
