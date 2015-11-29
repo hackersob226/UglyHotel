@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+import javax.sql.*;
 
 public class MakeReservationPanel extends JPanel {
     JTable table;
