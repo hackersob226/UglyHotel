@@ -53,6 +53,8 @@ public class MakeFeedbackPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             commentHere = comment.getText();
+            JOptionPane confirm = new JOptionPane();
+            confirm.showMessageDialog(null, "Feedback submitted.");
             HotelApp.currentState = state;
             HotelApp.checkState();
         }
