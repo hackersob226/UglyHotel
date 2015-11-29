@@ -8,7 +8,7 @@ import javax.sql.*;
 
 public class MakeFeedbackPanel extends JPanel {
     String city = "Atlanta";
-    String rating = "Good";
+    String rating = "Excellent";
     String commentHere;
     JButton ok;
     JTextField comment;
@@ -53,10 +53,28 @@ public class MakeFeedbackPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             commentHere = comment.getText();
+            try {
+                checkSubmit(HotelApp.con, HotelApp.dbname, rating, city, commentHere, LoginPanel.sessionUserName);
+            }  catch (SQLException ex) {
+                System.out.println("Error");
+            }
             JOptionPane confirm = new JOptionPane();
             confirm.showMessageDialog(null, "Feedback submitted.");
             HotelApp.currentState = state;
             HotelApp.checkState();
+        }
+    }
+
+    public void checkSubmit(Connection con, String dbName, String rating, String location, String comment, String username) throws SQLException {
+        PreparedStatement stmt = null;
+        String query1 = "INSERT INTO HOTELREVIEW (Rating, Location, Comment, Username) VALUES (\"" + rating + "\", \"" + location + "\", \"" + comment + "\", \"" + username + "\")";
+        try {
+            con.setAutoCommit(false);
+            stmt = con.prepareStatement(query1);
+            stmt.executeUpdate();
+            con.commit();
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
         }
     }
 }
