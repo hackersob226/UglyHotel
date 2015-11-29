@@ -89,6 +89,7 @@ public class SearchRoomsPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             if (getDate()) {
+                HotelApp.createReservation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             }

@@ -47,8 +47,7 @@ public class HotelApp {
         layout.add(new CustomerPanel(), "CustomerView");
         layout.add(new ManagerPanel(), "ManagerView");
         layout.add(new SearchRoomsPanel(), "SearchRooms");
-        layout.add(new MakeReservationPanel(), "MakeReservation"); //Make new constructor
-        layout.add(new ConfirmationPanel(), "Confirmation"); //Make new constructor
+        layout.add(new ConfirmationPanel(), "Confirmation");
         layout.add(new PaymentInfoPanel(), "PaymentInfo");
         
         checkState();
@@ -61,6 +60,10 @@ public class HotelApp {
     public static void checkState() {
         CardLayout c = (CardLayout)(layout.getLayout());
         c.show(layout, currentState);
+    }
+    
+    public static void createReservation() {
+        layout.add(new MakeReservationPanel(), "MakeReservation");
     }
     
     public static void transReservetoDetails() {
