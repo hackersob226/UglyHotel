@@ -8,6 +8,7 @@ public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
     private JTextField startDate, endDate;
     private JButton search;
+    ResultSet reservationTable;
     Calendar start, end;
 
     public SearchRoomsPanel() {
@@ -89,9 +90,47 @@ public class SearchRoomsPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             if (getDate()) {
+
+
+                try {
+                    reservationTable = findRooms(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText());
+                } catch (SQLException ex) {
+                    System.out.println("Error");
+                }
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             }
         }
     }
+
+    public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date , String loc) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum
+                        AND ROOM.Location = RESERVATIONHASROOM.Location AND
+                        RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
+                        (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > endDate) OR
+                        (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < startDate)";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            if(!rs.isBeforeFirst())
+            {
+                System.out.println("Could not find user in CUSTOMER.");
+            }else
+            {
+                System.out.println("Logged in as a customer.");
+                return 1;
+            }
+        } catch (SQLException e ) {
+            System.out.println("Error");
+        }
+
+        return 0;
+    }
 }
+
+/* SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum
+   AND ROOM.Location = RESERVATIONHASROOM.Location AND
+   RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
+   (RESERVATION.StartDate > endDate AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < startDate AND RESERVATION.StartDate < startDate)
