@@ -68,7 +68,7 @@ public class CheckDetailsPanel extends JPanel {
         add(dropDown);
 
         addCard = new JButton("Add Card");
-        addCard.addActionListener(new ButtonListener("AddCard"));
+        addCard.addActionListener(new ButtonListener("PaymentInfo"));
         add(addCard);
 
         submit = new JButton("Submit");
