@@ -96,6 +96,9 @@ public class SearchRoomsPanel extends JPanel {
                 java.sql.Date sqlStartDate = new java.sql.Date(HotelApp.startSearchReserveDate.getTime().getTime());
                 java.sql.Date sqlEndDate = new java.sql.Date(HotelApp.endSearchReserveDate.getTime().getTime());
 
+                System.out.println(sqlStartDate);
+                System.out.println(sqlEndDate);
+
                 try {
                     reservationTable = findRooms(HotelApp.con, HotelApp.dbname, sqlStartDate, sqlEndDate, city);
                 } catch (SQLException ex) {
@@ -110,7 +113,7 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > " + endDate + " AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < " + startDate + " AND RESERVATION.StartDate < startDate)";
+        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > " + endDate + " AND RESERVATION.EndDate > " + endDate + ") OR (RESERVATION.EndDate < " + startDate + " AND RESERVATION.StartDate < " + startDate + ")";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
