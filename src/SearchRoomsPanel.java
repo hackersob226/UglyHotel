@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.sql.*;
+import javax.sql.*;
 
 public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
@@ -90,30 +92,25 @@ public class SearchRoomsPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             if (getDate()) {
-<<<<<<< HEAD
 
+                java.sql.Date sqlStartDate = new java.sql.Date(HotelApp.startSearchReserveDate.getTime().getTime());
+                java.sql.Date sqlEndDate = new java.sql.Date(HotelApp.endSearchReserveDate.getTime().getTime());
 
                 try {
-                    reservationTable = findRooms(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText());
+                    reservationTable = findRooms(HotelApp.con, HotelApp.dbname, sqlStartDate, sqlEndDate, city);
                 } catch (SQLException ex) {
                     System.out.println("Error");
                 }
-=======
                 HotelApp.createReservation();
->>>>>>> origin/master
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             }
         }
     }
 
-    public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date , String loc) throws SQLException {
+    public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum
-                        AND ROOM.Location = RESERVATIONHASROOM.Location AND
-                        RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
-                        (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > endDate) OR
-                        (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < startDate)";
+        String query = "SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < startDate)";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -124,17 +121,18 @@ public class SearchRoomsPanel extends JPanel {
             }else
             {
                 System.out.println("Logged in as a customer.");
-                return 1;
             }
+            return rs;
         } catch (SQLException e ) {
             System.out.println("Error");
         }
 
-        return 0;
+        return null;
     }
 }
 
 /* SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum
-   AND ROOM.Location = RESERVATIONHASROOM.Location AND
-   RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
-   (RESERVATION.StartDate > endDate AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < startDate AND RESERVATION.StartDate < startDate)
+ * AND ROOM.Location = RESERVATIONHASROOM.Location AND
+ * RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
+ * (RESERVATION.StartDate > endDate AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < startDate AND RESERVATION.StartDate < startDate)
+   */
