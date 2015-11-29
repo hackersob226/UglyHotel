@@ -97,4 +97,8 @@ public class HotelApp {
     public static void createFeedback(String city) {
         layout.add(new CityFeedbackPanel(city), "CityFeedback");
     }
+    
+    public static void createMakeFeedback() {
+        layout.add(new MakeFeedbackPanel(), "MakeFeedback");
+    }
 }
