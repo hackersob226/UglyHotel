@@ -78,4 +78,12 @@ public class HotelApp {
     public static void createAvailRooms() {
         layout.add(new AvailableRoomsPanel(), "AvailableRooms");
     }
+    
+    public static void createCancelReserve() {
+        layout.add(new CancelReservePanel(), "CancelReserve");
+    }
+    
+    public static void createCancelRooms() {
+        layout.add(new CancelRoomsPanel(), "CancelRooms");
+    }
 }

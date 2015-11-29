@@ -21,6 +21,7 @@ public class CustomerPanel extends JPanel {
         add(updateReserve);
         
         cancelReserve = new JButton("Cancel Reservation");
+        cancelReserve.addActionListener(new ButtonListener("CancelReserve"));
         add(cancelReserve);
         
         newFeedback = new JButton("Provide Feedback");
@@ -40,6 +41,8 @@ public class CustomerPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (state == "UpdateReserve") {
                 HotelApp.createUpdateReserve();
+            } else if (state == "CancelReserve") {
+                HotelApp.createCancelReserve();
             }
             HotelApp.currentState = state;
             HotelApp.checkState();
