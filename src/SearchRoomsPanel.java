@@ -90,6 +90,7 @@ public class SearchRoomsPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             if (getDate()) {
+<<<<<<< HEAD
 
 
                 try {
@@ -97,6 +98,9 @@ public class SearchRoomsPanel extends JPanel {
                 } catch (SQLException ex) {
                     System.out.println("Error");
                 }
+=======
+                HotelApp.createReservation();
+>>>>>>> origin/master
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             }
