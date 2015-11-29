@@ -101,7 +101,12 @@ public class CheckDetailsPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (state == "calculate") {
                 price = calculateTotal(diff);
-            } else {
+            } else if (state == "PaymentInfo") {
+                HotelApp.goToPaymentInfo();
+                HotelApp.currentState = state;
+                HotelApp.checkState();
+            } else if (state == "Confirmation") {
+                HotelApp.goToConfirmation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             }

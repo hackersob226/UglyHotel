@@ -28,6 +28,7 @@ public class CustomerPanel extends JPanel {
         add(newFeedback);
         
         viewFeedback = new JButton("View Feedback");
+        viewFeedback.addActionListener(new ButtonListener("ViewFeedback"));
         add(viewFeedback);
     }
     
