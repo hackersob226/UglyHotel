@@ -69,4 +69,8 @@ public class HotelApp {
     public static void transReservetoDetails() {
         layout.add(new CheckDetailsPanel(tempArrayForDetails, startSearchReserveDate, endSearchReserveDate), "CheckDetails");
     }
+    
+    public static void createUpdateReserve() {
+        layout.add(new UpdateReservePanel(), "UpdateReserve");
+    }
 }
