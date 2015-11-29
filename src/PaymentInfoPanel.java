@@ -57,7 +57,7 @@ public class PaymentInfoPanel extends JPanel {
         // String[] tempCreditCards = {"1234", "2345"};
         // creditCards = tempCreditCards;
         dropDown = new JComboBox(creditCards);
-        selectedCard = dropDown.getItemAt(0);
+        selectedCard = (String)dropDown.getItemAt(0);
         dropDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 selectedCard = (String)dropDown.getSelectedItem();
@@ -173,6 +173,7 @@ public class PaymentInfoPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            save();
             String expireDate = "01/" + expDate.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
             LocalDate date = LocalDate.parse(expireDate, formatter);
