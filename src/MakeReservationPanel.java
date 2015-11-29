@@ -57,7 +57,7 @@ public class MakeReservationPanel extends JPanel {
             }
         }
         
-        HotelApp.tempArrayForDetails = someArray;
+        HotelApp.tempArrayForDetails = someArray; //Selected Reservations go into tempArrayForDetails
         //Print Array
         /*for (int i = 0; i < HotelApp.tempArrayForDetails.length; i++) {
             for(int j = 0; j < HotelApp.tempArrayForDetails[i].length; j++) {

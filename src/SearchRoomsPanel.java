@@ -8,7 +8,7 @@ public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
     private JTextField startDate, endDate;
     private JButton search;
-    Calendar start, end;
+    Calendar start, end; //Putting Start/end date in these variables when "Search" is clicked
 
     public SearchRoomsPanel() {
         start = Calendar.getInstance();

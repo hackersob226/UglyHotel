@@ -26,7 +26,7 @@ public class CheckDetailsPanel extends JPanel {
         table = new JTable(model);
 
         //I can't get deselection to work. So selection is a one way thing here.
-        add(new JLabel("After selecting Extra Bed Option, hit Calculate to find Total Cost"));
+        add(new JLabel("After selecting Extra Bed Option, hit Calculate to find Total Cost. Please hit Calculate before Submitting."));
         table.setPreferredScrollableViewportSize(new Dimension(HotelApp.WIDTH - 50, HotelApp.HEIGHT - 150));
         JScrollPane scrollPane = new JScrollPane(table);
 
@@ -57,11 +57,11 @@ public class CheckDetailsPanel extends JPanel {
         add(calculate);
         
         //Credit Card numbers go here
-        Integer creditCards[] = {new Integer(1234), new Integer(2345)};
+        String creditCards[] = {"1234", "2345"};
         JComboBox dropDown = new JComboBox(creditCards);
         dropDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int selectedCard = (int)dropDown.getSelectedItem();
+                String selectedCard = (String)dropDown.getSelectedItem();
                 System.out.println(selectedCard); //GET RID OF THIS LATER
             }
         });
@@ -118,7 +118,7 @@ public class CheckDetailsPanel extends JPanel {
         }
 
         for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 5).equals(new Boolean(true))) {
+            if (model.getValueAt(i, 5).equals(new Boolean(true))) { //Checks for ExtraBed 
                 total += numDays * (int)model.getValueAt(i, 4);
             }
             total += numDays * (int)model.getValueAt(i, 3);
