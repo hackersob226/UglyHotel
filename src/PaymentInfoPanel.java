@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 import javax.sql.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class PaymentInfoPanel extends JPanel {
     JTextField name, cardNum, expDate, cvv;
@@ -164,8 +166,13 @@ public class PaymentInfoPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            String expireDate = "01/" + expDate.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
+            LocalDate date = LocalDate.parse(expireDate, formatter);
+            expireDate = date.toString();
+            System.out.println(expireDate);
             try {
-                addCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, cardNum.getText(), name.getText(), cvv.getText(), expDate.getText());
+                addCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, cardNum.getText(), name.getText(), cvv.getText(), expireDate);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
