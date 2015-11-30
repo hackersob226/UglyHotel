@@ -41,4 +41,29 @@ public class CityFeedbackPanel extends JPanel {
             HotelApp.checkState();
         }
     }
+
+    public void getData(Connection con, String dbName, String city) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT Rating, Comment FROM HOTELREVIEW WHERE Location = \"" + username + "\"";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            ArrayList<String> tempList = new ArrayList<String>();
+            ArrayList<String> tempList2 = new ArrayList<String>();
+            creditCards = new String[1];
+
+            while(rs.next())
+            {
+                tempList.add(rs.getString("Rating"));
+            }
+
+            if(tempList != null)
+            {
+                creditCards = tempList.toArray(creditCards);
+            }
+        } catch (SQLException e ) {
+            System.out.println("Error");
+        }
+    }
 }
