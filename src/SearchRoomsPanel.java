@@ -11,11 +11,14 @@ public class SearchRoomsPanel extends JPanel {
     private JTextField startDate, endDate;
     private JButton search;
     ResultSet reservationTable;
+    int rows;
     Calendar start, end; //Putting Start/end date in these variables when "Search" is clicked
 
     public SearchRoomsPanel() {
         start = Calendar.getInstance();
         end = Calendar.getInstance();
+
+        rows = 0;
 
         startDate = new JTextField(10);
         endDate = new JTextField(10);
@@ -113,7 +116,7 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM, RESERVATIONHASROOM, RESERVATION WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND ROOM.Location = \"" + loc + "\" AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > \"" + endDate + "\") OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < \"" + startDate + "\")";
+        String query = "SELECT * FROM ROOM INNER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) INNER JOIN RESERVATION ON RESERVATION.ReservationID = RESERVATIONHASROOM.ReservationID WHERE ROOM.Location = \"" + loc + "\" AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > \"" + endDate + "\") OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < \"" + startDate + "\")";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -122,6 +125,12 @@ public class SearchRoomsPanel extends JPanel {
             {
                 System.out.println("Could not find any available rooms.");
             }
+            while(rs.next())
+            {
+                rows++;
+                //System.out.println(rs.getInt("RoomNum") + ", " + rs.getString("RoomCategory") + ", " + rs.getInt("NumPersons") + ", " + rs.getFloat("CostPerDay") + ", " + rs.getFloat("CostOfExtraBedPerDay"));
+            }
+            HotelApp.numRows = rows;
             return rs;
         } catch (SQLException e ) {
             System.out.println(e.getMessage());
