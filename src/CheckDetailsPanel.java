@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
+import java.sql.*;
+import javax.sql.*;
 
 public class CheckDetailsPanel extends JPanel {
     JTable table;
@@ -15,6 +17,7 @@ public class CheckDetailsPanel extends JPanel {
     Calendar startDate, endDate;
     double price = -1, diff = 0;
     JLabel totalCost;
+    String creditCards[];
 
     public CheckDetailsPanel(Object[][] selected, Calendar start, Calendar end) {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
@@ -57,7 +60,13 @@ public class CheckDetailsPanel extends JPanel {
         add(calculate);
         
         //Credit Card numbers go here
-        String creditCards[] = {"1234", "2345"};
+        //String creditCards[] = {"1234", "2345"};
+
+        try {
+            populateCards(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
         JComboBox dropDown = new JComboBox(creditCards);
         dropDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -130,5 +139,36 @@ public class CheckDetailsPanel extends JPanel {
         }
         totalCost.setText(""+total+"");
         return total;
+    }
+
+    public int populateCards(Connection con, String dbName, String userName) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT CardNum FROM PAYMENTINFORMATION WHERE PAYMENTINFORMATION.Username = \"" + userName + "\"";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            ArrayList<String> tempList = new ArrayList<String>();
+            creditCards = new String[1];
+
+            while(rs.next())
+            {
+                tempList.add(rs.getString("CardNum"));
+            }
+
+            if(tempList != null)
+            {
+                creditCards = tempList.toArray(creditCards);
+            }
+
+            return 1;
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
+        }
+
+        if (stmt != null) { 
+            stmt.close();
+        }
+
+        return 0;
     }
 }
