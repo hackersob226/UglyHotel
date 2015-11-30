@@ -156,7 +156,7 @@ public class PaymentInfoPanel extends JPanel {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-
+            HotelApp.transReservetoDetails();
             HotelApp.currentState = state;
             HotelApp.checkState();
         }
@@ -181,7 +181,7 @@ public class PaymentInfoPanel extends JPanel {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-
+            HotelApp.transReservetoDetails();
             HotelApp.currentState = state;
             HotelApp.checkState();
         }
