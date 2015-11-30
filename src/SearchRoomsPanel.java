@@ -113,7 +113,7 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM, RESERVATIONHASROOM, RESERVATION WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > " + endDate + " AND RESERVATION.EndDate > " + endDate + ") OR (RESERVATION.EndDate < " + startDate + " AND RESERVATION.StartDate < " + startDate + ")";
+        String query = "SELECT * FROM ROOM, RESERVATIONHASROOM, RESERVATION WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location AND ROOM.Location = \"" + loc + "\" AND RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > \"" + endDate + "\") OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < \"" + startDate + "\")";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -139,4 +139,4 @@ public class SearchRoomsPanel extends JPanel {
  * AND ROOM.Location = RESERVATIONHASROOM.Location AND
  * RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
  * (RESERVATION.StartDate > endDate AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < startDate AND RESERVATION.StartDate < startDate)
-   */
+ */
