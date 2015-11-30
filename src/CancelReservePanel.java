@@ -28,10 +28,6 @@ public class CancelReservePanel extends JPanel {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check Reservation ID");
         }
-        //From here, need to find the matching Reservation ID, and then pass that information
-        //into the next window. The information needed is: StartDate, EndDate...actually virtually
-        //everything from the reservation will need to be put into the next window
-        //which is manageable since all we have to do is add it as a parameter into the next window's constructor
     }
 
     public class ButtonListener implements ActionListener {
@@ -44,7 +40,7 @@ public class CancelReservePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             searchID();
             if (id != -1) {
-                HotelApp.createCancelRooms();
+                HotelApp.createCancelRooms(id);
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             } else {

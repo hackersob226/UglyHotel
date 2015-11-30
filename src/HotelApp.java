@@ -82,8 +82,8 @@ public class HotelApp {
         layout.add(new CancelReservePanel(), "CancelReserve");
     }
 
-    public static void createCancelRooms() {
-        layout.add(new CancelRoomsPanel(), "CancelRooms");
+    public static void createCancelRooms(int id) {
+        layout.add(new CancelRoomsPanel(id), "CancelRooms");
     }
 
     public static void goToPaymentInfo() {
