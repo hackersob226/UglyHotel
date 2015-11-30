@@ -13,7 +13,6 @@ public class MakeReservationPanel extends JPanel {
     JButton submit;
     DataModel model;
     Object[][] data;
-    ResultSet availabilityData;
 
     // public MakeReservationPanel() {
     //     String[] col = {"Room Number", "Room Category", "Person Capacity",
@@ -34,20 +33,9 @@ public class MakeReservationPanel extends JPanel {
     //     add(submit);
     // }
 
-    public MakeReservationPanel(int numRows, ResultSet availableData) {
+    public MakeReservationPanel() {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Select Room"};
-
-        // try {
-        // while(availableData.next())
-        // {
-        //         System.out.println(availableData.getInt("RoomNum") + ", " + availableData.getString("RoomCategory") + ", " + availableData.getInt("NumPersons") + ", " + availableData.getFloat("CostPerDay") + ", " + availableData.getFloat("CostOfExtraBedPerDay"));
-        // }
-        // } catch (SQLException ex) {
-        //     System.out.println("Iteration Error");
-        // }
-
-        availabilityData = availableData;
 
         try {
             getData();
@@ -138,7 +126,7 @@ public class MakeReservationPanel extends JPanel {
     public void getData() throws SQLException {
         
         try {
-            ResultSet tableData = availabilityData;
+            ResultSet tableData = SearchRoomsPanel.reservationTable;
 
             ArrayList<Integer> tempList = new ArrayList<Integer>();
             ArrayList<String> tempList2 = new ArrayList<String>();

@@ -19,9 +19,6 @@ public class HotelApp {
     static Calendar startSearchReserveDate, endSearchReserveDate;
     static Object[][] tempArrayForDetails;
 
-    static int numRows;
-    static ResultSet availableTable;
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("Fancy Hotels");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +63,7 @@ public class HotelApp {
 
     //These have to be added everytime since they're instances of panels
     public static void createReservation() {
-        layout.add(new MakeReservationPanel(numRows, availableTable), "MakeReservation");
+        layout.add(new MakeReservationPanel(), "MakeReservation");
     }
 
     public static void transReservetoDetails() {

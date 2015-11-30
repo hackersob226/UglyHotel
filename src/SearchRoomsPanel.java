@@ -107,7 +107,6 @@ public class SearchRoomsPanel extends JPanel {
                 } catch (SQLException ex) {
                     System.out.println("Error");
                 }
-                HotelApp.availableTable = reservationTable;
                 HotelApp.createReservation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
@@ -117,7 +116,7 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM INNER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) INNER JOIN RESERVATION ON RESERVATION.ReservationID = RESERVATIONHASROOM.ReservationID WHERE ROOM.Location = \"" + loc + "\" AND (RESERVATION.StartDate > \"" + endDate + "\" AND RESERVATION.EndDate > \"" + endDate + "\") OR (RESERVATION.EndDate < \"" + startDate + "\" AND RESERVATION.StartDate < \"" + startDate + "\")";
+        String query = "SELECT * FROM ROOM INNER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) INNER JOIN RESERVATION ON RESERVATION.ReservationID = RESERVATIONHASROOM.ReservationID WHERE ROOM.Location = \"" + loc + "\" AND (RESERVATION.StartDate > \"" + ending + "\" AND RESERVATION.EndDate > \"" + ending + "\") OR (RESERVATION.EndDate < \"" + begin + "\" AND RESERVATION.StartDate < \"" + begin + "\")";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -131,7 +130,6 @@ public class SearchRoomsPanel extends JPanel {
                 rows++;
                 //System.out.println(rs.getInt("RoomNum") + ", " + rs.getString("RoomCategory") + ", " + rs.getInt("NumPersons") + ", " + rs.getFloat("CostPerDay") + ", " + rs.getFloat("CostOfExtraBedPerDay"));
             }
-            HotelApp.numRows = rows;
             rs.beforeFirst();
             return rs;
         } catch (SQLException e ) {
