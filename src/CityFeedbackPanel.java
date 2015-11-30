@@ -10,14 +10,18 @@ public class CityFeedbackPanel extends JPanel {
     String location; //Location of feedback
     JButton ok;
     JTable table;
+    Object[][] data;
     public CityFeedbackPanel(String city) {
-        
         location = city;
+        try {
+            getData(HotelApp.con, HotelApp.dbname,location);
+        } catch (SQLException ex) {
+            System.out.println("Error");
+        }
+        
         add(new JLabel("Feedback for " + location));
 
         String[] col = {"Rating", "Comment"};
-        //Place ratings in Object[][] data
-        Object[][] data = { {"Excellent", "This is a filler."}, {"Neutral", "This is also a filler"}};
 
         table = new JTable(data, col);
         table.setPreferredScrollableViewportSize(new Dimension(HotelApp.WIDTH - 50, HotelApp.HEIGHT - 150));
@@ -43,28 +47,31 @@ public class CityFeedbackPanel extends JPanel {
         }
     }
 
-    /*public void getData(Connection con, String dbName, String city) throws SQLException {
+    public void getData(Connection con, String dbName, String city) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT Rating, Comment FROM HOTELREVIEW WHERE Location = \"" + username + "\"";
+        String query = "SELECT Rating, Comment FROM HOTELREVIEW WHERE Location = \"" + city + "\"";
+        
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             ArrayList<String> tempList = new ArrayList<String>();
             ArrayList<String> tempList2 = new ArrayList<String>();
-            creditCards = new String[1];
 
             while(rs.next())
             {
                 tempList.add(rs.getString("Rating"));
+                tempList2.add(rs.getString("Comment"));
             }
 
-            if(tempList != null)
-            {
-                creditCards = tempList.toArray(creditCards);
+            Object[][] temp = new Object[tempList.size()][2];
+            for (int i = 0; i < tempList.size(); i++) {
+                temp[i][0] = tempList.get(i);
+                temp[i][1] = tempList2.get(i);
             }
+            data = temp;
         } catch (SQLException e ) {
             System.out.println("Error");
         }
-    }*/
+    }
 }
