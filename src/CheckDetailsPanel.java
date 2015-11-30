@@ -18,6 +18,7 @@ public class CheckDetailsPanel extends JPanel {
     float price = -1, diff = 0;
     JLabel totalCost;
     String creditCards[];
+    JComboBox dropDown;
 
     public CheckDetailsPanel(Object[][] selected, Calendar start, Calendar end) {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
@@ -67,7 +68,7 @@ public class CheckDetailsPanel extends JPanel {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        JComboBox dropDown = new JComboBox(creditCards);
+        dropDown = new JComboBox(creditCards);
         dropDown.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String selectedCard = (String)dropDown.getSelectedItem();
@@ -117,6 +118,15 @@ public class CheckDetailsPanel extends JPanel {
             } else if (state == "Confirmation") {
                 //TODO
                 //Add a reservation to the database
+
+                java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime().getTime());
+                java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime().getTime());
+
+                try {
+                    addReservation(HotelApp.con, HotelApp.dbname, sqlStartDate, sqlEndDate, price, 0, LoginPanel.sessionUserName, Integer.parseInt((String)dropDown.getSelectedItem()));
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
                 HotelApp.goToConfirmation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
@@ -172,6 +182,26 @@ public class CheckDetailsPanel extends JPanel {
             stmt.close();
         }
 
+        return 0;
+    }
+
+    public int addReservation(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, float cost, int isCancelled, String loggedInUser, int cardNum) throws SQLException {
+        PreparedStatement stmt = null;
+        String query = "INSERT INTO RESERVATION (StartDate, EndDate, CardNum, IsCancelled, Username, TotalCost) VALUES (\"" + begin + "\", \"" + ending + "\", \"" + cardNum + "\", \"" + isCancelled + "\", \"" + loggedInUser + "\", \"" + cost + "\")";
+
+        try {
+            con.setAutoCommit(false);
+            stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
+            con.commit();
+        } catch (SQLException e ) {
+            System.out.println(e.getMessage());
+        }
+
+        if (stmt != null) { 
+            stmt.close();
+        }
+        System.out.println("Added Reservation");
         return 0;
     }
 }
