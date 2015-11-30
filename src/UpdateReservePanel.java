@@ -137,7 +137,7 @@ public class UpdateReservePanel extends JPanel {
             if (state == "AvailableRooms") {
                 if (id != -1) {
                     if (searchAvail()) {
-                        HotelApp.createAvailRooms();
+                        HotelApp.createAvailRooms(id);
                         HotelApp.currentState = state;
                         HotelApp.checkState();
                     }

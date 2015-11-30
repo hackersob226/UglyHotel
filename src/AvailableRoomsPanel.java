@@ -16,7 +16,7 @@ public class AvailableRoomsPanel extends JPanel {
     JButton submit, calculate;
     double price; //Storing updated price here.
 
-    public AvailableRoomsPanel() {
+    public AvailableRoomsPanel(int id) {
         add(new JLabel("After selecting Extra Bed Option, hit Calculate to find Total Cost Updated. Please hit Calculate before Submitting."));
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Extra Bed?"};

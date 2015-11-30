@@ -74,8 +74,8 @@ public class HotelApp {
         layout.add(new UpdateReservePanel(), "UpdateReserve");
     }
 
-    public static void createAvailRooms() {
-        layout.add(new AvailableRoomsPanel(), "AvailableRooms");
+    public static void createAvailRooms(int id) {
+        layout.add(new AvailableRoomsPanel(id), "AvailableRooms");
     }
 
     public static void createCancelReserve() {
