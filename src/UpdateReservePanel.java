@@ -30,24 +30,24 @@ public class UpdateReservePanel extends JPanel {
         searchID = new JButton("Search ID");
         searchID.addActionListener(new ButtonListener("searchID"));
         add(searchID);
-        
+
         add(new JLabel("Current Start Date: "));
         currStartDisplay = new JLabel("xxx");
         add(currStartDisplay);
         add(new JLabel("Current End Date: "));
         currEndDisplay = new JLabel("xxx");
         add(currEndDisplay);
-        
+
         add(new JLabel("New Start Date"));
         add(newStartDate);
         add(new JLabel("New End Date"));
         add(newEndDate);
-        
+
         searchAvail = new JButton("Search Availability");
         searchAvail.addActionListener(new ButtonListener("AvailableRooms"));
         add(searchAvail);
     }
-    
+
     public void searchID() {
         try{
             id = Integer.parseInt(reserveID.getText());
@@ -55,17 +55,13 @@ public class UpdateReservePanel extends JPanel {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check Reservation ID");
         }
-        
-        //Find Matching ID, then find start Date and end Date from the reservation
-        //currStart = from SQL; currEnd = from SQL;
-        //Then this will automatically format the dates to appear in the window.
-        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
-        String date1 = format1.format(currStart.getTime());
-        currStartDisplay.setText(date1);
-        String date2 = format1.format(currEnd.getTime());
-        currEndDisplay.setText(date2);
+        try {
+            getData(HotelApp.con, HotelApp.dbname, id);
+        } catch (SQLException ex) {
+            System.out.println("Input Error");
+        }
     }
-    
+
     public boolean searchAvail() {
         //Literally copying this code from searchRooms
         boolean flag1 = false;
@@ -85,7 +81,7 @@ public class UpdateReservePanel extends JPanel {
             error.showMessageDialog(null, "Please check Start Date input.");
         }
         System.out.println("Start: " + newStart.getTime()); //GET RID OF THIS LATER
-        
+
         String endD = newEndDate.getText();
         try {
             index = endD.indexOf("/");
@@ -100,7 +96,7 @@ public class UpdateReservePanel extends JPanel {
             error.showMessageDialog(null, "Please check End Date input.");
         }
         System.out.println("End: " + newEnd.getTime()); //GET RID OF THIS LATER
-        
+
         HotelApp.startSearchReserveDate = newStart; //Sends the date as metaData
         HotelApp.endSearchReserveDate = newEnd;
         if (flag1 && flag2) {
@@ -108,6 +104,27 @@ public class UpdateReservePanel extends JPanel {
         }
         return false;
     }
+
+    public void getData(Connection con, String dbName, int id) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT RESERVATION.StartDate, RESERVATION.EndDate  FROM RESERVATION WHERE ReservationID = \"" + id + "\"";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            ArrayList<java.sql.Date> start = new ArrayList<java.sql.Date>();
+            ArrayList<java.sql.Date> end = new ArrayList<java.sql.Date>();
+
+            while(rs.next())
+            {
+                start.add(rs.getDate("StartDate"));
+                end.add(rs.getDate("EndDate"));
+            }
+            currStartDisplay.setText(""+start.get(0)+"");
+            currEndDisplay.setText(""+end.get(0)+"");     
+        } catch (SQLException e ) {
+            System.out.println("Execution Error");
+        }
+    }    
 
     public class ButtonListener implements ActionListener {
         private String state;
