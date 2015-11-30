@@ -13,12 +13,10 @@ public class MakeReservationPanel extends JPanel {
     JButton submit;
     DataModel model;
 
-    public MakeReservationPanel() {
+    public MakeReservationPanel(int numRows) {
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Select Room"};
-        Object[][] data = { {new Integer(11), "Filler", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)},
-            {new Integer(11), "Filler", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)}
-        };
+        Object[][] data = new Object[numRows][6];
         model = new DataModel(data, col);
         table = new JTable(model);
 
