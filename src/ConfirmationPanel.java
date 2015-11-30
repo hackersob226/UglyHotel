@@ -71,7 +71,7 @@ public class ConfirmationPanel extends JPanel {
         if (stmt != null) { 
             stmt.close();
         }
-        id = -1
+        id = -1;
         return id;
     }
 }
