@@ -11,6 +11,7 @@ public class CityFeedbackPanel extends JPanel {
     JButton ok;
     JTable table;
     public CityFeedbackPanel(String city) {
+        
         location = city;
         add(new JLabel("Feedback for " + location));
 
@@ -42,7 +43,7 @@ public class CityFeedbackPanel extends JPanel {
         }
     }
 
-    public void getData(Connection con, String dbName, String city) throws SQLException {
+    /*public void getData(Connection con, String dbName, String city) throws SQLException {
         Statement stmt = null;
         String query = "SELECT Rating, Comment FROM HOTELREVIEW WHERE Location = \"" + username + "\"";
         try {
@@ -65,5 +66,5 @@ public class CityFeedbackPanel extends JPanel {
         } catch (SQLException e ) {
             System.out.println("Error");
         }
-    }
+    }*/
 }
