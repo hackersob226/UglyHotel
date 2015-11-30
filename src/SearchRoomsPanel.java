@@ -10,7 +10,7 @@ public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
     private JTextField startDate, endDate;
     private JButton search;
-    ResultSet reservationTable;
+    static ResultSet reservationTable;
     int rows;
     Calendar start, end; //Putting Start/end date in these variables when "Search" is clicked
 
@@ -107,6 +107,7 @@ public class SearchRoomsPanel extends JPanel {
                 } catch (SQLException ex) {
                     System.out.println("Error");
                 }
+                HotelApp.availableTable = reservationTable;
                 HotelApp.createReservation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
@@ -131,6 +132,7 @@ public class SearchRoomsPanel extends JPanel {
                 //System.out.println(rs.getInt("RoomNum") + ", " + rs.getString("RoomCategory") + ", " + rs.getInt("NumPersons") + ", " + rs.getFloat("CostPerDay") + ", " + rs.getFloat("CostOfExtraBedPerDay"));
             }
             HotelApp.numRows = rows;
+            rs.beforeFirst();
             return rs;
         } catch (SQLException e ) {
             System.out.println(e.getMessage());

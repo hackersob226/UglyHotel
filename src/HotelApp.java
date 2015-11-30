@@ -20,6 +20,7 @@ public class HotelApp {
     static Object[][] tempArrayForDetails;
 
     static int numRows;
+    static ResultSet availableTable;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Fancy Hotels");
@@ -65,7 +66,7 @@ public class HotelApp {
 
     //These have to be added everytime since they're instances of panels
     public static void createReservation() {
-        layout.add(new MakeReservationPanel(numRows), "MakeReservation");
+        layout.add(new MakeReservationPanel(numRows, availableTable), "MakeReservation");
     }
 
     public static void transReservetoDetails() {
