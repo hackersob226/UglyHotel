@@ -116,7 +116,7 @@ public class SearchRoomsPanel extends JPanel {
 
     public ResultSet findRooms(Connection con, String dbName, java.sql.Date begin, java.sql.Date ending, String loc) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT * FROM ROOM LEFT OUTER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) INNER JOIN RESERVATION ON RESERVATION.ReservationID = RESERVATIONHASROOM.ReservationID WHERE ROOM.Location = \"" + loc + "\" AND ((RESERVATION.StartDate > \"" + ending + "\" AND RESERVATION.EndDate > \"" + ending + "\") OR (RESERVATION.EndDate < \"" + begin + "\" AND RESERVATION.StartDate < \"" + begin + "\") OR (NOT (ROOM.RoomNum IN (SELECT RESERVATIONHASROOM.RoomNum FROM RESERVATIONHASROOM))))";
+        String query = "SELECT * FROM ROOM LEFT OUTER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) LEFT OUTER JOIN RESERVATION ON RESERVATION.ReservationID = RESERVATIONHASROOM.ReservationID WHERE ROOM.Location = \"" + loc + "\" AND ((RESERVATION.StartDate > \"" + ending + "\" AND RESERVATION.EndDate > \"" + ending + "\") OR (RESERVATION.EndDate < \"" + begin + "\" AND RESERVATION.StartDate < \"" + begin + "\") OR (NOT (ROOM.RoomNum IN (SELECT RESERVATIONHASROOM.RoomNum FROM RESERVATIONHASROOM))))";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
