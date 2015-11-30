@@ -15,7 +15,7 @@ public class CheckDetailsPanel extends JPanel {
     DataModel model;
     Object[][] data;
     Calendar startDate, endDate;
-    double price = -1, diff = 0;
+    float price = -1, diff = 0;
     JLabel totalCost;
     String creditCards[];
 
@@ -115,6 +115,8 @@ public class CheckDetailsPanel extends JPanel {
                 HotelApp.currentState = state;
                 HotelApp.checkState();
             } else if (state == "Confirmation") {
+                //TODO
+                //Add a reservation to the database
                 HotelApp.goToConfirmation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
@@ -122,8 +124,8 @@ public class CheckDetailsPanel extends JPanel {
         }
     }
     
-    public double calculateTotal(double numDays) {
-        double total = 0;
+    public float calculateTotal(double numDays) {
+        float total = 0;
         for (int i = 0; i < model.getRowCount(); i++){
             if (selectionModel.isSelectedIndex(i)) {
                 model.setValueAt(new Boolean(true), i, 5);
@@ -133,11 +135,12 @@ public class CheckDetailsPanel extends JPanel {
 
         for (int i = 0; i < model.getRowCount(); i++) {
             if (model.getValueAt(i, 5).equals(new Boolean(true))) { //Checks for ExtraBed 
-                total += numDays * (int)model.getValueAt(i, 4);
+                total += numDays * (float)model.getValueAt(i, 4);
             }
-            total += numDays * (int)model.getValueAt(i, 3);
+            total += numDays * (float)model.getValueAt(i, 3);
         }
-        totalCost.setText(""+total+"");
+        String result = String.format("%.2f", total);
+        totalCost.setText("$" + result + "");
         return total;
     }
 
