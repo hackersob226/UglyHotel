@@ -80,7 +80,6 @@ public class PaymentInfoPanel extends JPanel {
         cardName = name.getText();
         if(cardName.length() == 0) {
             flag4 = true;
-        } else {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please insert Card Name.");
         }
