@@ -25,7 +25,7 @@ public class CancelRoomsPanel extends JPanel {
         totalCost = new JLabel("");
         updateCost = new JLabel("");
         try {
-            getData(HotelApp.con, HotelApp.dbname, reserveId);
+            getData(HotelApp.con, HotelApp.dbname, reserveId, LoginPanel.sessionUserName);
         } catch (SQLException ex) {
             System.out.println("Input Error");
         }
@@ -125,9 +125,9 @@ public class CancelRoomsPanel extends JPanel {
         }
     }
 
-    public void getData(Connection con, String dbName, int id) throws SQLException {
+    public void getData(Connection con, String dbName, int id, String username) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT ROOM.RoomNum, ROOM.NumPersons, ROOM.RoomCategory, ROOM.CostPerDay, ROOM.CostofExtraBedPerDay, RESERVATIONHASROOM.IncludeExtraBed FROM ROOM INNER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) WHERE RESERVATIONHASROOM.ReservationID = \"" + id + "\"";
+        String query = "SELECT ROOM.RoomNum, ROOM.NumPersons, ROOM.RoomCategory, ROOM.CostPerDay, ROOM.CostofExtraBedPerDay, RESERVATIONHASROOM.IncludeExtraBed FROM ROOM INNER JOIN RESERVATIONHASROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) WHERE RESERVATIONHASROOM.ReservationID = \"" + id + "\" AND Username = \"" + username + "\"";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
