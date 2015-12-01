@@ -70,6 +70,9 @@ public class CityFeedbackPanel extends JPanel {
                 temp[i][1] = tempList2.get(i);
             }
             data = temp;
+            if (stmt != null) { 
+                stmt.close();
+            }
         } catch (SQLException e ) {
             System.out.println("Error");
         }

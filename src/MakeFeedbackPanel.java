@@ -76,5 +76,9 @@ public class MakeFeedbackPanel extends JPanel {
         } catch (SQLException e ) {
             System.out.println(e.getMessage());
         }
+
+        if (stmt != null) { 
+            stmt.close();
+        }
     }
 }

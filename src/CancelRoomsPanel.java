@@ -193,5 +193,9 @@ public class CancelRoomsPanel extends JPanel {
         } catch (SQLException e ) {
             System.out.println("Execution Error");
         }
+
+        if (stmt != null) { 
+            stmt.close();
+        }
     }
 }
