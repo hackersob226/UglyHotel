@@ -147,22 +147,26 @@ public class CancelRoomsPanel extends JPanel {
                 costPerDayList.add(rs.getDouble("CostPerDay"));
                 costBedList.add(rs.getDouble("CostofExtraBedPerDay"));
                 extraBedList.add(rs.getInt("IncludeExtraBed"));
-            }
-
-            Object[][] temp = new Object[roomNumList.size()][6];
-            for (int i = 0; i < roomNumList.size(); i++) {
-                temp[i][0] = roomNumList.get(i);
-                temp[i][1] = numPersonList.get(i);
-                temp[i][2] = roomCategoryList.get(i);
-                temp[i][3] = costPerDayList.get(i);
-                temp[i][4] = costBedList.get(i);
-                if (extraBedList.get(i) == 1) {
-                    temp[i][5] = "Yes";
-                } else {
-                    temp[i][5] = "No";
+            } 
+            if (roomNumList.size() ==0) {
+                JOptionPane error = new JOptionPane();
+                error.showMessageDialog(null, "Could not find Reservation ID");
+            } else {
+                Object[][] temp = new Object[roomNumList.size()][6];
+                for (int i = 0; i < roomNumList.size(); i++) {
+                    temp[i][0] = roomNumList.get(i);
+                    temp[i][1] = numPersonList.get(i);
+                    temp[i][2] = roomCategoryList.get(i);
+                    temp[i][3] = costPerDayList.get(i);
+                    temp[i][4] = costBedList.get(i);
+                    if (extraBedList.get(i) == 1) {
+                        temp[i][5] = "Yes";
+                    } else {
+                        temp[i][5] = "No";
+                    }
                 }
+                data = temp;
             }
-            data = temp;
         } catch (SQLException e ) {
             System.out.println("Execution Error");
         }
