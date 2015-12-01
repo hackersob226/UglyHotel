@@ -57,7 +57,7 @@ public class UpdateReservePanel extends JPanel {
             error.showMessageDialog(null, "Please check Reservation ID");
         }
         try {
-            getData(HotelApp.con, HotelApp.dbname, id);
+            getData(HotelApp.con, HotelApp.dbname, id, LoginPanel.sessionUserName);
         } catch (SQLException ex) {
             System.out.println("Input Error");
         }
@@ -121,9 +121,9 @@ public class UpdateReservePanel extends JPanel {
         return false;
     }
 
-    public void getData(Connection con, String dbName, int id) throws SQLException {
+    public void getData(Connection con, String dbName, int id, String username) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT RESERVATION.StartDate, RESERVATION.EndDate  FROM RESERVATION WHERE ReservationID = \"" + id + "\"";
+        String query = "SELECT RESERVATION.StartDate, RESERVATION.EndDate FROM RESERVATION WHERE ReservationID = \"" + id + "\" AND Username = \"" + username + "\"";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -138,7 +138,7 @@ public class UpdateReservePanel extends JPanel {
             if (start.size() == 0) {
                 JOptionPane error = new JOptionPane();
                 error.showMessageDialog(null, "Could not find Reservation ID");
-            } else {
+            } else{
                 currStartDisplay.setText(""+start.get(0)+"");
                 currEndDisplay.setText(""+end.get(0)+"");
             }
