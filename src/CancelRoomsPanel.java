@@ -187,11 +187,16 @@ public class CancelRoomsPanel extends JPanel {
                 end.add(rs.getDate("EndDate"));
                 cost.add(rs.getDouble("TotalCost"));
             }
-            total = cost.get(0);
-            startV = start.get(0);
-            startDate.setText(""+start.get(0)+"");
-            endDate.setText(""+end.get(0)+"");
-            totalCost.setText("$"+cost.get(0)+"");
+            if (start.size() ==0) {
+                JOptionPane error = new JOptionPane();
+                error.showMessageDialog(null, "Could not find Reservation ID");
+            } else {
+                total = cost.get(0);
+                startV = start.get(0);
+                startDate.setText(""+start.get(0)+"");
+                endDate.setText(""+end.get(0)+"");
+                totalCost.setText("$"+cost.get(0)+"");
+            }
         } catch (SQLException e ) {
             System.out.println("Execution Error");
         }
