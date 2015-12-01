@@ -81,7 +81,11 @@ public class PaymentInfoPanel extends JPanel {
         try {
             long test = Long.parseLong(cardNum.getText());
             cardNumber = cardNum.getText();
-            flag1 = true;
+            //CHECKS IF CARD NUMBER IS LENGTH OF 9
+            //CHANGE THIS IF WE CHANGE CARD NUMBER LENGTH
+            if (cardNumber.length() == 9) {
+                flag1 = true;
+            }
         } catch (Exception e) {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check Card Number.");
@@ -111,6 +115,8 @@ public class PaymentInfoPanel extends JPanel {
         }
     }
     
+    //Unused Method
+    /*
     public void delete() {  
         boolean flag = false;
         for (int i = 0; i < creditCards.length; i++) {
@@ -127,7 +133,7 @@ public class PaymentInfoPanel extends JPanel {
             JOptionPane confirm = new JOptionPane();
             confirm.showMessageDialog(null, "Item is already deleted.");
         }
-    }
+    }*/
 
     public class BackListener implements ActionListener {
         private String state;
@@ -153,6 +159,13 @@ public class PaymentInfoPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             try {
                 removeCard(HotelApp.con, HotelApp.dbname, LoginPanel.sessionUserName, selectedCard);
+                if (selectedCard == null) {
+                     JOptionPane confirm = new JOptionPane();
+                     confirm.showMessageDialog(null, "No Card Deleted.");
+                } else {
+                    JOptionPane confirm = new JOptionPane();
+                    confirm.showMessageDialog(null, "Card Deleted.");
+                }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }

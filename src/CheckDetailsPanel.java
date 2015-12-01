@@ -59,7 +59,7 @@ public class CheckDetailsPanel extends JPanel {
         calculate = new JButton("Calculate Price");
         calculate.addActionListener(new ButtonListener("calculate"));
         add(calculate);
-        
+
         //Credit Card numbers go here
         //String creditCards[] = {"1234", "2345"};
 
@@ -118,22 +118,29 @@ public class CheckDetailsPanel extends JPanel {
             } else if (state == "Confirmation") {
                 //TODO
                 //Add a reservation to the database
+                if (price == -1) {
+                    JOptionPane error = new JOptionPane();
+                    error.showMessageDialog(null, "Please Calculate Price first before Submitting.");
+                } else if ((String)dropDown.getSelectedItem() == null) {
+                    JOptionPane error = new JOptionPane();
+                    error.showMessageDialog(null, "Please Select a card before Submitting. If you don't have a card, add one.");
+                } else {
+                    java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime().getTime());
+                    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime().getTime());
 
-                java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime().getTime());
-                java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime().getTime());
-
-                try {
-                    addReservation(HotelApp.con, HotelApp.dbname, sqlStartDate, sqlEndDate, price, 0, LoginPanel.sessionUserName, Integer.parseInt((String)dropDown.getSelectedItem()));
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
+                    try {
+                        addReservation(HotelApp.con, HotelApp.dbname, sqlStartDate, sqlEndDate, price, 0, LoginPanel.sessionUserName, Integer.parseInt((String)dropDown.getSelectedItem()));
+                    } catch (SQLException ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                    HotelApp.goToConfirmation();
+                    HotelApp.currentState = state;
+                    HotelApp.checkState();
                 }
-                HotelApp.goToConfirmation();
-                HotelApp.currentState = state;
-                HotelApp.checkState();
             }
         }
     }
-    
+
     public float calculateTotal(double numDays) {
         float total = 0;
         for (int i = 0; i < model.getRowCount(); i++){
@@ -144,7 +151,7 @@ public class CheckDetailsPanel extends JPanel {
         }
 
         for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 5).equals(new Boolean(true))) { //Checks for ExtraBed 
+            if (model.getValueAt(i, 5).equals(new Boolean(true))) { //Checks for ExtraBed
                 total += numDays * (float)model.getValueAt(i, 4);
             }
             total += numDays * (float)model.getValueAt(i, 3);
@@ -178,7 +185,7 @@ public class CheckDetailsPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
 
@@ -198,7 +205,7 @@ public class CheckDetailsPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
         System.out.println("Added Reservation");

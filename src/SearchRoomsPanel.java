@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 import javax.sql.*;
+import java.text.SimpleDateFormat;
 
 public class SearchRoomsPanel extends JPanel {
     String city = "Atlanta";
@@ -43,7 +44,7 @@ public class SearchRoomsPanel extends JPanel {
         search.addActionListener(new ButtonListener("MakeReservation"));
         add(search);
     }
-    
+
     public boolean getDate() {
         boolean flag1 = false;
         boolean flag2 = false;
@@ -62,7 +63,7 @@ public class SearchRoomsPanel extends JPanel {
             error.showMessageDialog(null, "Please check Start Date input.");
         }
         System.out.println("Start: " + start.getTime()); //GET RID OF THIS LATER
-        
+
         String endD = endDate.getText();
         try {
             index = endD.indexOf("/");
@@ -77,9 +78,25 @@ public class SearchRoomsPanel extends JPanel {
             error.showMessageDialog(null, "Please check End Date input.");
         }
         System.out.println("End: " + end.getTime()); //GET RID OF THIS LATER
-        
+
         HotelApp.startSearchReserveDate = start; //Sends the date as metaData
         HotelApp.endSearchReserveDate = end;
+        
+        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+        String date1 = format1.format(start.getTime());
+        String date2 = format1.format(end.getTime());
+        double diff = -1;
+
+        try {
+            java.util.Date dateStart = format1.parse(date1);
+            java.util.Date dateEnd = format1.parse(date2);
+            diff = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
+        } catch (Exception e) {
+            //hehe
+        }
+        if (diff <= 0) {
+            return false;
+        }
         if (flag1 && flag2) {
             return true;
         }
@@ -110,6 +127,9 @@ public class SearchRoomsPanel extends JPanel {
                 HotelApp.createReservation();
                 HotelApp.currentState = state;
                 HotelApp.checkState();
+            } else {
+                JOptionPane error = new JOptionPane();
+                error.showMessageDialog(null, "End Date must be after Start Date.");
             }
         }
     }
@@ -136,7 +156,7 @@ public class SearchRoomsPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
 

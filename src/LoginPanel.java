@@ -56,6 +56,8 @@ public class LoginPanel extends JPanel {
                 HotelApp.checkState();
             }else
             {
+                JOptionPane error = new JOptionPane();
+                error.showMessageDialog(null, "Incorrect Login Credentials.");
                 System.out.println("Incorrect Login Credentials");
             }
         }
