@@ -172,7 +172,7 @@ public class CancelRoomsPanel extends JPanel {
         }
 
         stmt = null;
-        query = "SELECT RESERVATION.StartDate, RESERVATION.EndDate, RESERVATION.TotalCost FROM RESERVATION WHERE ReservationID = \"" + id + "\"";
+        query = "SELECT RESERVATION.StartDate, RESERVATION.EndDate, RESERVATION.TotalCost FROM RESERVATION WHERE ReservationID = \"" + id + "\" AND Username = \"" + username + "\"";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
