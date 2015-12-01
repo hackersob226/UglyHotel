@@ -19,10 +19,10 @@ public class PaymentInfoPanel extends JPanel {
     int savedCVV;
     //Need to set selectedCard to be deleted to the first card in the drop Down
     String selectedCard = "1234";
-    
+
     public PaymentInfoPanel() {
         expirationDate = Calendar.getInstance();
-        
+
         name = new JTextField(10);
         cardNum = new JTextField(16);
         expDate = new JTextField(7);
@@ -74,10 +74,16 @@ public class PaymentInfoPanel extends JPanel {
         back.addActionListener(new BackListener("CheckDetails"));
         add(back);
     }
-    
+
     public void save() {
-        boolean flag1 = false, flag2 = false, flag3 = false;
+        boolean flag1 = false, flag2 = false, flag3 = false, flag4 = false;
         cardName = name.getText();
+        if(cardName.length() == 0) {
+            flag4 = true;
+        } else {
+            JOptionPane error = new JOptionPane();
+            error.showMessageDialog(null, "Please insert Card Name.");
+        }
         try {
             long test = Long.parseLong(cardNum.getText());
             cardNumber = cardNum.getText();
@@ -109,15 +115,15 @@ public class PaymentInfoPanel extends JPanel {
             JOptionPane error = new JOptionPane();
             error.showMessageDialog(null, "Please check Expiration Date.");
         }
-        if (flag1 && flag2 && flag3) {
+        if (flag1 && flag2 && flag3 && flag4) {
             JOptionPane confirm = new JOptionPane();
             confirm.showMessageDialog(null, "Saved.");
         }
     }
-    
+
     //Unused Method
     /*
-    public void delete() {  
+    public void delete() {
         boolean flag = false;
         for (int i = 0; i < creditCards.length; i++) {
             if (selectedCard == creditCards[i] && creditCards[i] != "Deleted") {
@@ -224,7 +230,7 @@ public class PaymentInfoPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
 
@@ -247,7 +253,7 @@ public class PaymentInfoPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
 
@@ -268,7 +274,7 @@ public class PaymentInfoPanel extends JPanel {
             System.out.println(e.getMessage());
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
 

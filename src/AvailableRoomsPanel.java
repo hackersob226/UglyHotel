@@ -103,12 +103,12 @@ public class AvailableRoomsPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            /*if (diffToday <= 3) {
+            if (diffToday <= 3) {
                 JOptionPane confirm = new JOptionPane();
-                confirm.showMessageDialog(null, "Reservation cannot be updated.");
+                confirm.showMessageDialog(null, "Reservation cannot be updated, only cancelled.");
                 HotelApp.currentState = state;
                 HotelApp.checkState();
-            } else {*/
+            } else {
                 try {
                     checkUpdate(HotelApp.con, HotelApp.dbname, reserveId, sqlStartDate, sqlEndDate, price);
                 } catch (SQLException ex) {
@@ -118,7 +118,7 @@ public class AvailableRoomsPanel extends JPanel {
                 confirm.showMessageDialog(null, "Reservation Updated.");
                 HotelApp.currentState = state;
                 HotelApp.checkState();
-           //}
+           }
         }
     }
 

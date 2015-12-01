@@ -14,6 +14,7 @@ public class UpdateReservePanel extends JPanel {
     JLabel currStartDisplay, currEndDisplay;
     Calendar newStart, newEnd; //User Inputted dates stored here
     int id = -1; //User Inputted Reservation ID here
+    double diff = -1; //Difference between User Inputted dates
     public UpdateReservePanel(){
         currStart = Calendar.getInstance();
         currEnd = Calendar.getInstance();
@@ -38,9 +39,9 @@ public class UpdateReservePanel extends JPanel {
         currEndDisplay = new JLabel("xxx");
         add(currEndDisplay);
 
-        add(new JLabel("New Start Date"));
+        add(new JLabel("New Start Date (mm/dd/yyyy):"));
         add(newStartDate);
-        add(new JLabel("New End Date"));
+        add(new JLabel("New End Date (mm/dd/yyyy):"));
         add(newEndDate);
 
         searchAvail = new JButton("Search Availability");
@@ -97,8 +98,23 @@ public class UpdateReservePanel extends JPanel {
         }
         System.out.println("End: " + newEnd.getTime()); //GET RID OF THIS LATER
 
+        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+        String date1 = format1.format(newStart.getTime());
+        //add(new JLabel("Start: " + date1));
+        String date2 = format1.format(newEnd.getTime());
+        //add(new JLabel("End: " + date2));
+
+        try {
+            java.util.Date dateStart = format1.parse(date1);
+            java.util.Date dateEnd = format1.parse(date2);
+            diff = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
+        } catch (Exception e) {
+            //hehe
+        }
+
         HotelApp.startSearchReserveDate = newStart; //Sends the date as metaData
         HotelApp.endSearchReserveDate = newEnd;
+
         if (flag1 && flag2) {
             return true;
         }
@@ -119,13 +135,18 @@ public class UpdateReservePanel extends JPanel {
                 start.add(rs.getDate("StartDate"));
                 end.add(rs.getDate("EndDate"));
             }
-            currStartDisplay.setText(""+start.get(0)+"");
-            currEndDisplay.setText(""+end.get(0)+"");
+            if (start.size() == 0) {
+                JOptionPane error = new JOptionPane();
+                error.showMessageDialog(null, "Could not find Reservation ID");
+            } else {
+                currStartDisplay.setText(""+start.get(0)+"");
+                currEndDisplay.setText(""+end.get(0)+"");
+            }
         } catch (SQLException e ) {
             System.out.println("Execution Error");
         }
 
-        if (stmt != null) { 
+        if (stmt != null) {
             stmt.close();
         }
     }
@@ -139,7 +160,10 @@ public class UpdateReservePanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
             if (state == "AvailableRooms") {
-                if (id != -1) {
+                if (diff <= 0) {
+                    JOptionPane error1 = new JOptionPane();
+                    error1.showMessageDialog(null, "Please make sure that your end date is later than your start date.");
+                } else if (id != -1) {
                     if (searchAvail()) {
                         HotelApp.createAvailRooms(id);
                         HotelApp.currentState = state;

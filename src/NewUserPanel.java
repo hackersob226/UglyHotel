@@ -45,23 +45,32 @@ public class NewUserPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            int error = 0;
-            try {
-                error = checkSubmit(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText(), confirmPass.getText(), email.getText());
-            } catch (SQLException ex) {
-                System.out.println("Error");
-                error = 2;
-            }
-            if(error == 0)
-            {
-                HotelApp.currentState = state;
-                HotelApp.checkState();
-            }else if(error == 1)
-            {
-                System.out.println("Entered passwords don't match");
-            }else
-            {
-                System.out.println("User already exists");
+            if (userName.getText().length() == 0 || pass.getText().length() == 0 || confirmPass.getText().length() == 0 || email.getText().length() == 0) {
+                JOptionPane error1 = new JOptionPane();
+                error1.showMessageDialog(null, "Please fill out all text fields.");
+            } else {
+                int error = 0;
+                try {
+                    error = checkSubmit(HotelApp.con, HotelApp.dbname, userName.getText(), pass.getText(), confirmPass.getText(), email.getText());
+                } catch (SQLException ex) {
+                    System.out.println("Error");
+                    error = 2;
+                }
+                if(error == 0)
+                {
+                    HotelApp.currentState = state;
+                    HotelApp.checkState();
+                }else if(error == 1)
+                {
+                    JOptionPane error2 = new JOptionPane();
+                    error2.showMessageDialog(null, "Entered passwords don't match.");
+                    System.out.println("Entered passwords don't match");
+                }else
+                {
+                    JOptionPane error3 = new JOptionPane();
+                    error3.showMessageDialog(null, "User already exists");
+                    System.out.println("User already exists");
+                }
             }
         }
     }
@@ -112,6 +121,8 @@ public class NewUserPanel extends JPanel {
         if (stmt != null) { 
             stmt.close();
         }
+        JOptionPane confirm = new JOptionPane();
+        confirm.showMessageDialog(null, "Added new user.");
         System.out.println("Added new user");
         return 0;
     }
