@@ -17,9 +17,11 @@ public class ManagerPanel extends JPanel {
         add(viewReserve);
 
         viewPopRoom = new JButton("View Pop. Room Cat. Report ");
+        viewPopRoom.addActionListener(new ButtonListener("PopRoomReport"));
         add(viewPopRoom);
 
         viewRevenue = new JButton("View Revenue Report");
+        viewRevenue.addActionListener(new ButtonListener("RevenueReport"));
         add(viewRevenue);
 
     }

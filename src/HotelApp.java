@@ -48,6 +48,9 @@ public class HotelApp {
         layout.add(new ManagerPanel(), "ManagerView");
         layout.add(new SearchRoomsPanel(), "SearchRooms");
         layout.add(new ViewFeedbackPanel(), "ViewFeedback");
+        layout.add(new ReserveReportPanel(), "ReserveReport");
+        layout.add(new PopRoomReportPanel(), "PopRoomReport");
+        layout.add(new RevenueReportPanel(), "RevenueReport");
 
         checkState();
 
