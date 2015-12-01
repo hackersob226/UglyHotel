@@ -13,6 +13,7 @@ public class ManagerPanel extends JPanel {
         add(new JLabel("Welcome... "));
 
         viewReserve = new JButton("View Reservation Report");
+        viewReserve.addActionListener(new ButtonListener("ReserveReport"));
         add(viewReserve);
 
         viewPopRoom = new JButton("View Pop. Room Cat. Report ");

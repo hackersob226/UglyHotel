@@ -17,7 +17,8 @@ public class AvailableRoomsPanel extends JPanel {
     Object[][] data;
     Calendar today;
     int reserveId;
-    java.sql.Date sqlStartDate, sqlEndDate, sqlToday;
+    java.sql.Date sqlStartDate, sqlEndDate;
+    double diffToday;
 
     public AvailableRoomsPanel(int id) {
         add(new JLabel("Rooms are available. Please confirm details below before submitting."));
@@ -29,7 +30,20 @@ public class AvailableRoomsPanel extends JPanel {
 
         sqlStartDate = new java.sql.Date(HotelApp.startSearchReserveDate.getTime().getTime());
         sqlEndDate = new java.sql.Date(HotelApp.endSearchReserveDate.getTime().getTime());
-        sqlToday = new java.sql.Date(today.getTime().getTime());
+
+        SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
+        String date2 = format1.format(HotelApp.startSearchReserveDate.getTime());
+        //add(new JLabel("Start: " + date1));
+        String date1 = format1.format(today.getTime());
+        //add(new JLabel("End: " + date2));
+
+        try {
+            java.util.Date dateStart = format1.parse(date1);
+            java.util.Date dateEnd = format1.parse(date2);
+            diffToday = Math.round((dateEnd.getTime() - dateStart.getTime()) / (double) 86400000);
+        } catch (Exception e) {
+            //hehe
+        }
 
         try {
             getData(HotelApp.con, HotelApp.dbname, id, sqlStartDate, sqlEndDate);
@@ -89,21 +103,28 @@ public class AvailableRoomsPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            try {
-                checkUpdate(HotelApp.con, HotelApp.dbname, reserveId, sqlStartDate, sqlEndDate, price, sqlToday);
-            } catch (SQLException ex) {
-                System.out.println("Input Error");
-            }
-            JOptionPane confirm = new JOptionPane();
-            confirm.showMessageDialog(null, "Reservation Updated.");
-            HotelApp.currentState = state;
-            HotelApp.checkState();
+            if (diffToday <= 3) {
+                JOptionPane confirm = new JOptionPane();
+                confirm.showMessageDialog(null, "Reservation cannot be updated.");
+                HotelApp.currentState = state;
+                HotelApp.checkState();
+            } else {
+                try {
+                    checkUpdate(HotelApp.con, HotelApp.dbname, reserveId, sqlStartDate, sqlEndDate, price);
+                } catch (SQLException ex) {
+                    System.out.println("Input Error");
+                }
+                JOptionPane confirm = new JOptionPane();
+                confirm.showMessageDialog(null, "Reservation Updated.");
+                HotelApp.currentState = state;
+                HotelApp.checkState();
+           }
         }
     }
 
-    public void checkUpdate(Connection con, String dbName, int id, java.sql.Date startDay, java.sql.Date endDay, double price, java.sql.Date today) throws SQLException {
+    public void checkUpdate(Connection con, String dbName, int id, java.sql.Date startDay, java.sql.Date endDay, double price) throws SQLException {
         PreparedStatement stmt = null;
-        String query = "UPDATE RESERVATION SET StartDate = \"" + startDay+ "\", EndDate =\"" + endDay+ "\", TotalCost = \"" + price+ "\" WHERE ReservationID = \"" + id+ "\" AND \"" + today+ "\" <= DATEADD(day,-3,Reservation.StartDate)";
+        String query = "UPDATE RESERVATION SET StartDate = \"" + startDay+ "\", EndDate =\"" + endDay+ "\", TotalCost = \"" + price+ "\" WHERE ReservationID = \"" + id + "\"";
         try {
             con.setAutoCommit(false);
             stmt = con.prepareStatement(query);
@@ -116,7 +137,7 @@ public class AvailableRoomsPanel extends JPanel {
 
     public void getData(Connection con, String dbName, int id, java.sql.Date startDay, java.sql.Date endDay) throws SQLException {
         Statement stmt = null;
-        String query = "SELECT ROOM.RoomNum, ROOM.NumPersons, ROOM.RoomCategory, ROOM.CostPerDay, ROOM.CostofExtraBedPerDay, RESERVATIONHASROOM.IncludeExtraBed FROM RESERVATIONHASROOM INNER JOIN ROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) WHERE RESERVATIONHASROOM.ReservationID = \"" + id+ "\" AND NOT EXISTS(SELECT RESERVATION.ReservationID AND ReservationID = RESERVATION.ReservationID FROM RESERVATION WHERE RESERVATION.StartDate <= \"" + startDay + "\" AND RESERVATION.EndDate >= \"" + endDay + "\")";
+        String query = "SELECT * FROM RESERVATIONHASROOM INNER JOIN ROOM ON ( ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location ) WHERE RESERVATIONHASROOM.ReservationID = \"" + id+ "\" AND NOT EXISTS ( SELECT RESERVATIONHASROOM.RoomNum FROM RESERVATIONHASROOM INNER JOIN RESERVATION ON RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID INNER JOIN ROOM ON RESERVATIONHASROOM.RoomNum = ROOM.RoomNum WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND RESERVATION.ReservationID != \"" + id+ "\" AND RESERVATION.StartDate <= \"" + endDay+ "\" AND RESERVATION.EndDate >= \"" + startDay + "\")";
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
