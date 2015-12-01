@@ -162,8 +162,6 @@ public class CancelRoomsPanel extends JPanel {
                     temp[i][5] = "No";
                 }
             }
-            for (int j = 0; j < roomNumList.size(); j++) {
-            }
             data = temp;
         } catch (SQLException e ) {
             System.out.println("Execution Error");

@@ -11,54 +11,47 @@ import java.text.SimpleDateFormat;
 public class AvailableRoomsPanel extends JPanel {
     JTable table;
     DefaultListSelectionModel selectionModel;
-    DataModel model;
     JLabel totalCost;
     JButton submit, calculate;
     double price; //Storing updated price here.
+    Object[][] data;
+    Calendar today;
+    int reserveId;
+    java.sql.Date sqlStartDate, sqlEndDate, sqlToday;
 
     public AvailableRoomsPanel(int id) {
-        add(new JLabel("After selecting Extra Bed Option, hit Calculate to find Total Cost Updated. Please hit Calculate before Submitting."));
+        add(new JLabel("Rooms are available. Please confirm details below before submitting."));
         String[] col = {"Room Number", "Room Category", "Person Capacity",
                         "Cost per Day", "Cost of Extra Bed per Day", "Extra Bed?"};
-        //Place available rooms in Object[][] data
-        Object[][] data = { {new Integer(11), "Filler", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)},
-            {new Integer(11), "Filler", new Integer(1), new Integer(111), new Integer(10), new Boolean(false)}
-        };
-        model = new DataModel(data, col);
-        table = new JTable(model);
+        totalCost = new JLabel(" ");
+        today = Calendar.getInstance();
+        reserveId = id;
+
+        sqlStartDate = new java.sql.Date(HotelApp.startSearchReserveDate.getTime().getTime());
+        sqlEndDate = new java.sql.Date(HotelApp.endSearchReserveDate.getTime().getTime());
+        sqlToday = new java.sql.Date(today.getTime().getTime());
+
+        try {
+            getData(HotelApp.con, HotelApp.dbname, id, sqlStartDate, sqlEndDate);
+        } catch (SQLException ex) {
+            System.out.println("Input Error");
+        }
+
+        table = new JTable(data, col);
         table.setPreferredScrollableViewportSize(new Dimension(HotelApp.WIDTH - 50, HotelApp.HEIGHT - 150));
         JScrollPane scrollPane = new JScrollPane(table);
 
         add(scrollPane);
-        selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
 
         add(new JLabel("Total Cost Updated: "));
-        totalCost = new JLabel(" ");
         add(totalCost);
+        price = calculateTotal();
 
-        calculate = new JButton("Calculate");
-        calculate.addActionListener(new ButtonListener("calculate"));
-        add(calculate);
         submit = new JButton("Submit");
         submit.addActionListener(new ButtonListener("CustomerView"));
         add(submit);
     }
 
-    private class DataModel extends DefaultTableModel {
-
-        public DataModel(Object[][] data, Object[] columnNames) {
-            super(data, columnNames);
-        }
-
-        public Class<?> getColumnClass(int columnIndex) {
-            return columnIndex == 5 ? Boolean.class : getValueAt(0, columnIndex).getClass();
-        }
-
-        public boolean isCellEditable(int row, int column) {
-            return column == 5;
-        }
-    }
-    
     public double calculateTotal() {
         double diff = 0;
         SimpleDateFormat format1 = new SimpleDateFormat("MM-dd-yyyy");
@@ -75,22 +68,16 @@ public class AvailableRoomsPanel extends JPanel {
         } catch (Exception e) {
             //hehe
         }
-        
+
         double total = 0;
-        for (int i = 0; i < model.getRowCount(); i++){
-            if (selectionModel.isSelectedIndex(i)) {
-                model.setValueAt(new Boolean(true), i, 5);
-                System.out.println(selectionModel.isSelectedIndex(i));
+        for (int i = 0; i < data.length; i++) {
+            if (data[i][5] == "Yes") {
+                total += diff * ((Double)data[i][4]).doubleValue();
             }
+            total += diff * ((Double)data[i][3]).doubleValue();
         }
 
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 5).equals(new Boolean(true))) { //Checks for ExtraBed, so gather any ExtraBed Logic here
-                total += diff * (int)model.getValueAt(i, 4);
-            }
-            total += diff * (int)model.getValueAt(i, 3);
-        }
-        totalCost.setText(""+total+"");
+        totalCost.setText("$"+total+"");
         return total;
     }
 
@@ -102,14 +89,75 @@ public class AvailableRoomsPanel extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (state == "calculate") {
-                price = calculateTotal();
-            } else {
-                JOptionPane confirm = new JOptionPane();
-                confirm.showMessageDialog(null, "Reservation Updated.");
-                HotelApp.currentState = state;
-                HotelApp.checkState();
+            try {
+                checkUpdate(HotelApp.con, HotelApp.dbname, reserveId, sqlStartDate, sqlEndDate, price, sqlToday);
+            } catch (SQLException ex) {
+                System.out.println("Input Error");
             }
+            JOptionPane confirm = new JOptionPane();
+            confirm.showMessageDialog(null, "Reservation Updated.");
+            HotelApp.currentState = state;
+            HotelApp.checkState();
+        }
+    }
+
+    public void checkUpdate(Connection con, String dbName, int id, java.sql.Date startDay, java.sql.Date endDay, double price, java.sql.Date today) throws SQLException {
+        PreparedStatement stmt = null;
+        String query = "UPDATE RESERVATION SET StartDate = \"" + startDay+ "\", EndDate =\"" + endDay+ "\", TotalCost = \"" + price+ "\" WHERE ReservationID = \"" + id+ "\" AND \"" + today+ "\" <= DATEADD(day,-3,Reservation.StartDate)";
+        try {
+            con.setAutoCommit(false);
+            stmt = con.prepareStatement(query);
+            stmt.executeUpdate();
+            con.commit();
+        } catch (SQLException e ) {
+            System.out.println("Execution Error");
+        }
+    }
+
+    public void getData(Connection con, String dbName, int id, java.sql.Date startDay, java.sql.Date endDay) throws SQLException {
+        Statement stmt = null;
+        String query = "SELECT ROOM.RoomNum, ROOM.NumPersons, ROOM.RoomCategory, ROOM.CostPerDay, ROOM.CostofExtraBedPerDay, RESERVATIONHASROOM.IncludeExtraBed FROM RESERVATIONHASROOM INNER JOIN ROOM ON (ROOM.RoomNum = RESERVATIONHASROOM.RoomNum AND ROOM.Location = RESERVATIONHASROOM.Location) WHERE RESERVATIONHASROOM.ReservationID = \"" + id+ "\" AND NOT EXISTS(SELECT RESERVATION.ReservationID AND ReservationID = RESERVATION.ReservationID FROM RESERVATION WHERE RESERVATION.StartDate <= \"" + startDay + "\" AND RESERVATION.EndDate >= \"" + endDay + "\")";
+        try {
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            ArrayList<Integer> roomNumList = new ArrayList<Integer>();
+            ArrayList<Integer> numPersonList = new ArrayList<Integer>();
+            ArrayList<String> roomCategoryList = new ArrayList<String>();
+            ArrayList<Double> costPerDayList = new ArrayList<Double>();
+            ArrayList<Double> costBedList = new ArrayList<Double>();
+            ArrayList<Integer> extraBedList = new ArrayList<Integer>();
+
+            while(rs.next())
+            {
+                roomNumList.add(rs.getInt("RoomNum"));
+                numPersonList.add(rs.getInt("NumPersons"));
+                roomCategoryList.add(rs.getString("RoomCategory"));
+                costPerDayList.add(rs.getDouble("CostPerDay"));
+                costBedList.add(rs.getDouble("CostofExtraBedPerDay"));
+                extraBedList.add(rs.getInt("IncludeExtraBed"));
+            }
+
+            Object[][] temp = new Object[roomNumList.size()][6];
+            for (int i = 0; i < roomNumList.size(); i++) {
+                temp[i][0] = roomNumList.get(i);
+                temp[i][1] = numPersonList.get(i);
+                temp[i][2] = roomCategoryList.get(i);
+                temp[i][3] = costPerDayList.get(i);
+                temp[i][4] = costBedList.get(i);
+                if (extraBedList.get(i) == 1) {
+                    temp[i][5] = "Yes";
+                } else {
+                    temp[i][5] = "No";
+                }
+            }
+            data = temp;
+        } catch (SQLException e ) {
+            System.out.println("Execution Error");
+        }
+
+        if (stmt != null) { 
+            stmt.close();
         }
     }
 }

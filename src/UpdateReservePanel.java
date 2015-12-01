@@ -120,11 +120,15 @@ public class UpdateReservePanel extends JPanel {
                 end.add(rs.getDate("EndDate"));
             }
             currStartDisplay.setText(""+start.get(0)+"");
-            currEndDisplay.setText(""+end.get(0)+"");     
+            currEndDisplay.setText(""+end.get(0)+"");
         } catch (SQLException e ) {
             System.out.println("Execution Error");
         }
-    }    
+
+        if (stmt != null) { 
+            stmt.close();
+        }
+    }
 
     public class ButtonListener implements ActionListener {
         private String state;
