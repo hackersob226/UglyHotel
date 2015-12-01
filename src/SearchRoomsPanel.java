@@ -163,9 +163,3 @@ public class SearchRoomsPanel extends JPanel {
         return null;
     }
 }
-
-/* SELECT * FROM ROOM WHERE ROOM.RoomNum = RESERVATIONHASROOM.RoomNum
- * AND ROOM.Location = RESERVATIONHASROOM.Location AND
- * RESERVATIONHASROOM.ReservationID = RESERVATION.ReservationID AND
- * (RESERVATION.StartDate > endDate AND RESERVATION.EndDate > endDate) OR (RESERVATION.EndDate < startDate AND RESERVATION.StartDate < startDate)
- */
